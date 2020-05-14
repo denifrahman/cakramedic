@@ -452,7 +452,7 @@ class _LoginPageManagementState extends State<LoginPageManagement>
                               color: Colors.black,
                               size: 22.0,
                             ),
-                            hintText: "No Telepon",
+                            hintText: "Username",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold",
                                 fontSize: 16.0,

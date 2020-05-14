@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 //const baseUrl = "https://api-resource.cakramedic.com/index.php/";
-const baseUrl = "http://103.135.0.106:2020/api_mobile_charlie/index.php/";
-//const baseUrl = "http://192.168.100.114:8888/api-simrs-cakra/index.php/";
+//const baseUrl = "http://103.135.0.106:2020/api_mobile_charlie/index.php/";
+const baseUrl = "http://192.168.0.8:8888/api-simrs-cakra/index.php/";
 
 class Api {
   static Future getDokter(unit) {
@@ -127,28 +127,28 @@ class Api {
     return http.get(url);
   }
 
-  static Future getPendapatanTunai(datePendapatan) {
-    var url = baseUrl + "Dashboard/get_pendapatan_tunai/" + datePendapatan;
+  static Future getPendapatanTunai(datePendapatan,toDate) {
+    var url = baseUrl + "Dashboard/get_pendapatan_tunai/" + datePendapatan + '/' + toDate;
 //    print(url);
     return http.get(url);
   }
-  static Future getPendapatanTunaiUnit(datePendapatanUnit, unitId) {
-    var url = baseUrl + "Dashboard/get_pendapatan_tunai_by_unit/" + datePendapatanUnit + '/'+unitId;
+  static Future getPendapatanTunaiUnit(datePendapatanUnit,toDate, unitId) {
+    var url = baseUrl + "Dashboard/get_pendapatan_tunai_by_unit/" + datePendapatanUnit + '/' + toDate + '/' +unitId;
 //    print(url);
     return http.get(url);
   }
-  static Future getPendapatanTunaiPenjamin(datePendapatanPenjamin, penjaminId) {
-    var url = baseUrl + "Dashboard/get_pendapatan_tunai_by_penjamin/" + datePendapatanPenjamin + '/'+penjaminId;
+  static Future getPendapatanTunaiPenjamin(datePendapatanPenjamin,toDate, penjaminId) {
+    var url = baseUrl + "Dashboard/get_pendapatan_tunai_by_penjamin/" + datePendapatanPenjamin + '/' + toDate + '/' +penjaminId;
 //    print(url);
     return http.get(url);
   }
-  static Future getPiutangUnit(datePiutangUnit, unitId, status) {
-    var url = baseUrl + "Dashboard/get_piutang_by_unit/" + datePiutangUnit + '/' + unitId + '/'+ status;
+  static Future getPiutangUnit(datePiutangUnit, toDate, unitId, status) {
+    var url = baseUrl + "Dashboard/get_piutang_by_unit/" + datePiutangUnit + '/' + toDate + '/' + unitId + '/'+ status;
     print(url);
     return http.get(url);
   }
-  static Future getPiutangPenjamin(datePiutangPenjamin, penjaminId, status) {
-    var url = baseUrl + "Dashboard/get_piutang_by_penjamin/" + datePiutangPenjamin + '/'+penjaminId+'/'+status;
+  static Future getPiutangPenjamin(datePiutangPenjamin, toDate, penjaminId, status) {
+    var url = baseUrl + "Dashboard/get_piutang_by_penjamin/" + datePiutangPenjamin + '/' + toDate + '/' +penjaminId+'/'+status;
     print(url);
     return http.get(url);
   }

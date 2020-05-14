@@ -30,7 +30,7 @@ class _page_portalState extends State<page_portal> {
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
-            Container(height: 50,),
+            Container(height: 30,),
             Image(
                 width: 120,
 //                      height: 191.0,
