@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:cakramedic/LocalBindings.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:cakramedic/models/Farmasi.dart';
 import 'package:cakramedic/models/InstalasiKamarJenazah.dart';
@@ -19,7 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:tutorial_coach_mark/animated_focus_light.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:money2/money2.dart';
 
 class page_dashboard_management extends StatefulWidget {
@@ -39,6 +42,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
   @override
   void initState() {
     super.initState();
+    checkIntroducing();
     _getPoliKlinik();
     _getPenjamin();
     _getPendapatan();
@@ -46,6 +50,12 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
     _getKunjunganPerTanggalAndInstalasi();
     _controller = new TabController(length: 2, vsync: this);
   }
+  List<TargetFocus> targets = List();
+  GlobalKey keyButton = GlobalKey();
+  GlobalKey keyButton2 = GlobalKey();
+  GlobalKey keyButton3 = GlobalKey();
+  GlobalKey keyButton4 = GlobalKey();
+  GlobalKey keyButton5 = GlobalKey();
 
   var listPoliKlinik = new List<MPoliKlinik>();
   var dataPenjamin = new List<MPenjamin>();
@@ -64,26 +74,21 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
   Money PiutangUnitTotal;
   Money PiutangPenjaminTotal;
 
-  DateTime sampaiDate = DateTime.now();
-  DateTime dariDate = new DateTime(
-      DateTime.now().year, DateTime.now().month - 1, DateTime.now().day);
+  DateTime sampaiDate =
+      DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime dariDate = DateTime(DateTime.now().year, DateTime.now().month);
 
   DateTime datePendapatan = DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime toDatePendapatan = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-
-  DateTime datePendapatanUnit =
-      DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime toDatePendapatanUnit =
-      DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-  DateTime datePendapatanPenjamin =
-      DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime toDatePendapatanPenjamin =
-      DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime toDatePendapatan =DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime datePendapatanUnit =DateTime(DateTime.now().year, DateTime.now().month);
+  DateTime toDatePendapatanUnit =DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime datePendapatanPenjamin =DateTime(DateTime.now().year, DateTime.now().month);
+  DateTime toDatePendapatanPenjamin =DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
 
   DateTime datePiutangUnit =DateTime(DateTime.now().year, DateTime.now().month);
   DateTime toDatePiutangUnit = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-  DateTime datePiutangPenjamin = DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime toDatePiutangPenjamin = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime datePiutangPenjamin =DateTime(DateTime.now().year, DateTime.now().month);
+  DateTime toDatePiutangPenjamin =DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
 
   var dataRawatDarurat = new List<RawatDarurat>();
   var dataRawatInap = new List<RawatInap>();
@@ -103,6 +108,110 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
 
   void changeIndex() {
     setState(() => index = random.nextInt(3));
+  }
+
+  void checkIntroducing() async {
+    String isIntro = await LocalStorage.sharedInstance.readValue('intro');
+    if(isIntro == null){
+      initTargets();
+      WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    }
+  }
+
+  void showTutorial() {
+    TutorialCoachMark(context,
+        targets: targets,
+        colorShadow: Colors.red,
+        paddingFocus: 10,
+        opacityShadow: 0.8, finish: () {
+//          print("finish");
+          String setting_finger = '{"intro":"true"}';
+          LocalStorage.sharedInstance
+              .writeValue(key: 'intro', value: setting_finger);
+        }, clickTarget: (target) {
+          print(target.identify);
+          if(target.identify == 'Target 2'){
+            _selectMonthPendapatan(context);
+          }
+        }, clickSkip: () {
+//          print("skip");
+          String setting_finger = '{"intro":"true"}';
+          LocalStorage.sharedInstance
+              .writeValue(key: 'intro', value: setting_finger);
+        })
+      ..show();
+  }
+  void _afterLayout(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial();
+    });
+  }
+
+  void initTargets() {
+    targets.add(TargetFocus(
+      identify: "Target 1",
+      keyTarget: keyButton,
+      contents: [
+        ContentTarget(
+            align: AlignContent.bottom,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Filter Pendapatan",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Pilih icon tanggal berwarna kuning",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.RRect,
+    ));
+
+    targets.add(TargetFocus(
+      identify: "Target 2",
+      keyTarget: keyButton2,
+      contents: [
+        ContentTarget(
+            align: AlignContent.bottom,
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Text(
+                      "Pilih rentang tanggal",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image(
+                        width: 180,
+                        fit: BoxFit.fill,
+                        image: new AssetImage('assets/tutorial/tips1.gif'))
+                  ),
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.Circle,
+    ));
   }
 
   _getAllPasien() {
@@ -144,14 +253,15 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
       setState(() {
         Iterable list = json.decode(response.body)['data'];
         dataPenjamin = list.map((model) => MPenjamin.fromMap(model)).toList();
-        print(dataPenjamin[2].penjaminNama);
+//        print(dataPenjamin[2].penjaminNama);
       });
     });
   }
 
   _getPendapatan() {
     Api.getPendapatanTunai(
-            DateFormat('yyyy-MM-dd').format(datePendapatan).toString(),DateFormat('yyyy-MM-dd').format(toDatePendapatan).toString())
+            DateFormat('yyyy-MM-dd').format(datePendapatan).toString(),
+            DateFormat('yyyy-MM-dd').format(toDatePendapatan).toString())
         .then((value) {
       var result = json.decode(value.body);
       var total = Money.fromInt(int.parse(result['data'].toString()), ind);
@@ -223,7 +333,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
 
   @override
   Widget build(BuildContext context) {
-    print(PendapatanTotal.toString().isNotEmpty);
+//    print(PendapatanTotal.toString().isNotEmpty);
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     // TODO: implement build
@@ -241,6 +351,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
               Container(
                 width: width,
                 child: Card(
+                  key: keyButton,
                   elevation: 5,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,43 +386,53 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
-                                margin: EdgeInsets.only(
-                                    top: 0, right: 5),
-                                child: DateTime(DateTime.now().year, DateTime.now().month) != DateFormat('yyyy-MM-dd').format(datePendapatan) && DateFormat('yyyy-MM-dd').format(toDatePendapatan) != DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0)) ? Row(
-                                  children: <Widget>[
-                                    Text(
-                                      DateFormat('dd/MMM/yyyy')
-                                          .format(
-                                          datePendapatan)
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color:
-                                          Colors.grey[500]),
-                                    ),
-                                    Container(
-                                      width: 5,
-                                    ),
-                                    Text("s/d",
+                                margin: EdgeInsets.only(top: 0, right: 5),
+                                child: DateTime(DateTime.now().year,
+                                                DateTime.now().month) !=
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(datePendapatan) &&
+                                        DateFormat('yyyy-MM-dd')
+                                                .format(toDatePendapatan) !=
+                                            DateFormat('yyyy-MM-dd').format(
+                                                DateTime(
+                                                    DateTime.now().year,
+                                                    DateTime.now().month + 1,
+                                                    0))
+                                    ? Row(
+                                        children: <Widget>[
+                                          Text(
+                                            DateFormat('dd/MMM/yyyy')
+                                                .format(datePendapatan)
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey[500]),
+                                          ),
+                                          Container(
+                                            width: 5,
+                                          ),
+                                          Text("s/d",
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.cyan[800])),
+                                          Container(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            DateFormat('dd/MMM/yyyy')
+                                                .format(toDatePendapatan)
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey[500]),
+                                          ),
+                                        ],
+                                      )
+                                    : Text(
+                                        'Bulan Ini',
                                         style: TextStyle(
-                                            fontSize: 10,
-                                            color: Colors
-                                                .cyan[800])),
-                                    Container(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      DateFormat('dd/MMM/yyyy')
-                                          .format(
-                                          toDatePendapatan)
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color:
-                                          Colors.grey[500]),
-                                    ),
-                                  ],
-                                ):Text('Bulan Ini', style: TextStyle(fontSize: 12, color: Colors.grey),),
+                                            fontSize: 12, color: Colors.grey),
+                                      ),
                               ),
                               Text(
                                 PendapatanTotal.toString() == 'null'
@@ -319,21 +440,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                     : PendapatanTotal.toString(),
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w900),
+                                    fontSize: 22, fontWeight: FontWeight.w900),
                               ),
                             ],
                           ),
                           trailing: InkWell(
-                            onTap: () =>
-                                _selectMonthPendapatan(
-                                    context),
+                            onTap: () => _selectMonthPendapatan(context),
                             child: Container(
-                              margin: EdgeInsets.only(
-                                  top: 8, right: 5),
+                              margin: EdgeInsets.only(top: 8, right: 5),
                               child: Column(
                                 children: <Widget>[
-                                  Icon(Icons.date_range, size: 30,),
+                                  Icon(Icons.date_range,
+                                      key:keyButton2,
+                                      size: 30, color: Colors.amber),
                                 ],
                               ),
                             ),
@@ -413,46 +532,84 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
-                                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: <Widget>[
                                                 Container(
                                                   margin: EdgeInsets.only(
                                                       top: 10, right: 5),
-                                                  child: DateTime(DateTime.now().year, DateTime.now().month) != DateFormat('yyyy-MM-dd').format(datePendapatanUnit) && DateFormat('yyyy-MM-dd').format(toDatePendapatanUnit) != DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0)) ? Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        DateFormat('d/MMM/yyyy')
-                                                            .format(
-                                                            datePendapatanUnit)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                            Colors.grey[500]),
-                                                      ),
-                                                      Container(
-                                                        width: 5,
-                                                      ),
-                                                      Text("s/d",
+                                                  child: DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime
+                                                                          .now()
+                                                                      .month) !=
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(
+                                                                      datePendapatanUnit) &&
+                                                          DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(
+                                                                      toDatePendapatanUnit) !=
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(DateTime(
+                                                                      DateTime.now()
+                                                                          .year,
+                                                                      DateTime.now()
+                                                                              .month +
+                                                                          1,
+                                                                      0))
+                                                      ? Row(
+                                                          children: <Widget>[
+                                                            Text(
+                                                              DateFormat(
+                                                                      'dd/MMM/yyyy')
+                                                                  .format(
+                                                                      datePendapatanUnit)
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500]),
+                                                            ),
+                                                            Container(
+                                                              width: 5,
+                                                            ),
+                                                            Text("s/d",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    color: Colors
+                                                                            .cyan[
+                                                                        800])),
+                                                            Container(
+                                                              width: 5,
+                                                            ),
+                                                            Text(
+                                                              DateFormat(
+                                                                      'dd/MMM/yyyy')
+                                                                  .format(
+                                                                      toDatePendapatanUnit)
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500]),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Text(
+                                                          'Bulan Ini',
                                                           style: TextStyle(
-                                                              fontSize: 10,
-                                                              color: Colors
-                                                                  .cyan[800])),
-                                                      Container(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        DateFormat('d/MMM/yyyy')
-                                                            .format(
-                                                            toDatePendapatanUnit)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                            Colors.grey[500]),
-                                                      ),
-                                                    ],
-                                                  ):Text('Bulan Ini', style: TextStyle(fontSize: 12, color: Colors.grey),),
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
                                                 ),
                                                 InkWell(
                                                   onTap: () =>
@@ -463,7 +620,10 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                                         top: 8, right: 5),
                                                     child: Column(
                                                       children: <Widget>[
-                                                        Icon(Icons.date_range, size: 30,),
+                                                        Icon(Icons.date_range,
+                                                            size: 30,
+                                                            color:
+                                                                Colors.amber),
                                                       ],
                                                     ),
                                                   ),
@@ -522,46 +682,84 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
-                                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: <Widget>[
                                                 Container(
                                                   margin: EdgeInsets.only(
                                                       top: 10, right: 5),
-                                                  child: DateTime(DateTime.now().year, DateTime.now().month) != DateFormat('yyyy-MM-dd').format(datePendapatanPenjamin) && DateFormat('yyyy-MM-dd').format(toDatePendapatanPenjamin) != DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0)) ? Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        DateFormat('d/MMM/yyyy')
-                                                            .format(
-                                                                datePendapatanPenjamin)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                                Colors.grey[500]),
-                                                      ),
-                                                      Container(
-                                                        width: 5,
-                                                      ),
-                                                      Text("s/d",
+                                                  child: DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime
+                                                                          .now()
+                                                                      .month) !=
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(
+                                                                      datePendapatanPenjamin) &&
+                                                          DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(
+                                                                      toDatePendapatanPenjamin) !=
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(DateTime(
+                                                                      DateTime.now()
+                                                                          .year,
+                                                                      DateTime.now()
+                                                                              .month +
+                                                                          1,
+                                                                      0))
+                                                      ? Row(
+                                                          children: <Widget>[
+                                                            Text(
+                                                              DateFormat(
+                                                                      'dd/MMM/yyyy')
+                                                                  .format(
+                                                                      datePendapatanPenjamin)
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500]),
+                                                            ),
+                                                            Container(
+                                                              width: 5,
+                                                            ),
+                                                            Text("s/d",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    color: Colors
+                                                                            .cyan[
+                                                                        800])),
+                                                            Container(
+                                                              width: 5,
+                                                            ),
+                                                            Text(
+                                                              DateFormat(
+                                                                      'dd/MMM/yyyy')
+                                                                  .format(
+                                                                      toDatePendapatanPenjamin)
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500]),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Text(
+                                                          'Bulan Ini',
                                                           style: TextStyle(
-                                                              fontSize: 10,
-                                                              color: Colors
-                                                                  .cyan[800])),
-                                                      Container(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        DateFormat('d/MMM/yyyy')
-                                                            .format(
-                                                                toDatePendapatanPenjamin)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                                Colors.grey[500]),
-                                                      ),
-                                                    ],
-                                                  ):Text('Bulan Ini', style: TextStyle(fontSize: 12, color: Colors.grey),),
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
                                                 ),
                                                 InkWell(
                                                   onTap: () =>
@@ -572,7 +770,10 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                                         top: 8, right: 5),
                                                     child: Column(
                                                       children: <Widget>[
-                                                        Icon(Icons.date_range, size: 30,),
+                                                        Icon(Icons.date_range,
+                                                            size: 30,
+                                                            color:
+                                                                Colors.amber),
                                                       ],
                                                     ),
                                                   ),
@@ -650,7 +851,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                               Text(
                                 'Total Pasien',
                                 style: TextStyle(
-                                    fontSize: 12, color: Colors.cyan[500]),
+                                    fontSize: 12, color: Colors.orange),
                               ),
                               Text(
                                 totalPasien == null ? '' : totalPasien,
@@ -659,7 +860,8 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                               )
                             ],
                           ),
-                          trailing: Icon(FontAwesomeIcons.users),
+                          trailing: Icon(FontAwesomeIcons.users,
+                              color: Colors.orange),
                         )),
                   ),
                   Expanded(
@@ -670,8 +872,8 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                             children: <Widget>[
                               Text(
                                 'Hari ini',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.cyan[500]),
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.red),
                               ),
                               Text(
                                 HariIni == null ? '' : HariIni,
@@ -808,46 +1010,84 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
-                                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: <Widget>[
                                                 Container(
                                                   margin: EdgeInsets.only(
                                                       top: 0, right: 5),
-                                                  child: DateTime(DateTime.now().year, DateTime.now().month) != DateFormat('yyyy-MM-dd').format(datePendapatanPenjamin) && DateFormat('yyyy-MM-dd').format(toDatePendapatanPenjamin) != DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0)) ? Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        DateFormat('dd/MMM/yyyy')
-                                                            .format(
-                                                            datePiutangUnit)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                            Colors.grey[500]),
-                                                      ),
-                                                      Container(
-                                                        width: 5,
-                                                      ),
-                                                      Text("s/d",
+                                                  child: DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime
+                                                                          .now()
+                                                                      .month) !=
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(
+                                                                      datePendapatanPenjamin) &&
+                                                          DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(
+                                                                      toDatePendapatanPenjamin) !=
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(DateTime(
+                                                                      DateTime.now()
+                                                                          .year,
+                                                                      DateTime.now()
+                                                                              .month +
+                                                                          1,
+                                                                      0))
+                                                      ? Row(
+                                                          children: <Widget>[
+                                                            Text(
+                                                              DateFormat(
+                                                                      'dd/MMM/yyyy')
+                                                                  .format(
+                                                                      datePiutangUnit)
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500]),
+                                                            ),
+                                                            Container(
+                                                              width: 5,
+                                                            ),
+                                                            Text("s/d",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    color: Colors
+                                                                            .cyan[
+                                                                        800])),
+                                                            Container(
+                                                              width: 5,
+                                                            ),
+                                                            Text(
+                                                              DateFormat(
+                                                                      'dd/MMM/yyyy')
+                                                                  .format(
+                                                                      toDatePiutangUnit)
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500]),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Text(
+                                                          'Bulan Ini',
                                                           style: TextStyle(
-                                                              fontSize: 10,
-                                                              color: Colors
-                                                                  .cyan[800])),
-                                                      Container(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        DateFormat('dd/MMM/yyyy')
-                                                            .format(
-                                                            toDatePiutangUnit)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                            Colors.grey[500]),
-                                                      ),
-                                                    ],
-                                                  ):Text('Bulan Ini', style: TextStyle(fontSize: 12, color: Colors.grey),),
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
                                                 ),
                                                 InkWell(
                                                   onTap: () =>
@@ -858,7 +1098,10 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                                         top: 8, right: 5),
                                                     child: Column(
                                                       children: <Widget>[
-                                                        Icon(Icons.date_range,size: 30,),
+                                                        Icon(Icons.date_range,
+                                                            size: 30,
+                                                            color:
+                                                                Colors.amber),
                                                       ],
                                                     ),
                                                   ),
@@ -950,46 +1193,84 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
-                                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: <Widget>[
                                                 Container(
                                                   margin: EdgeInsets.only(
                                                       top: 0, right: 5),
-                                                  child: DateTime(DateTime.now().year, DateTime.now().month) != DateFormat('yyyy-MM-dd').format(datePendapatanPenjamin) && DateFormat('yyyy-MM-dd').format(toDatePendapatanPenjamin) != DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month + 1, 0)) ? Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        DateFormat('d/MMM/yyyy')
-                                                            .format(
-                                                            datePendapatanPenjamin)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                            Colors.grey[500]),
-                                                      ),
-                                                      Container(
-                                                        width: 5,
-                                                      ),
-                                                      Text("s/d",
+                                                  child: DateTime(
+                                                                  DateTime.now()
+                                                                      .year,
+                                                                  DateTime
+                                                                          .now()
+                                                                      .month) !=
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(
+                                                                      datePendapatanPenjamin) &&
+                                                          DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(
+                                                                      toDatePendapatanPenjamin) !=
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(DateTime(
+                                                                      DateTime.now()
+                                                                          .year,
+                                                                      DateTime.now()
+                                                                              .month +
+                                                                          1,
+                                                                      0))
+                                                      ? Row(
+                                                          children: <Widget>[
+                                                            Text(
+                                                              DateFormat(
+                                                                      'dd/MMM/yyyy')
+                                                                  .format(
+                                                                      datePendapatanPenjamin)
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500]),
+                                                            ),
+                                                            Container(
+                                                              width: 5,
+                                                            ),
+                                                            Text("s/d",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    color: Colors
+                                                                            .cyan[
+                                                                        800])),
+                                                            Container(
+                                                              width: 5,
+                                                            ),
+                                                            Text(
+                                                              DateFormat(
+                                                                      'dd/MMM/yyyy')
+                                                                  .format(
+                                                                      toDatePendapatanPenjamin)
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500]),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Text(
+                                                          'Bulan Ini',
                                                           style: TextStyle(
-                                                              fontSize: 10,
-                                                              color: Colors
-                                                                  .cyan[800])),
-                                                      Container(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        DateFormat('d/MMM/yyyy')
-                                                            .format(
-                                                            toDatePendapatanPenjamin)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                            Colors.grey[500]),
-                                                      ),
-                                                    ],
-                                                  ):Text('Bulan Ini', style: TextStyle(fontSize: 12, color: Colors.grey),),
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
                                                 ),
                                                 InkWell(
                                                   onTap: () =>
@@ -1000,7 +1281,10 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                                         top: 8, right: 5),
                                                     child: Column(
                                                       children: <Widget>[
-                                                        Icon(Icons.date_range,size: 30,),
+                                                        Icon(Icons.date_range,
+                                                            size: 30,
+                                                            color:
+                                                                Colors.amber),
                                                       ],
                                                     ),
                                                   ),
@@ -1087,7 +1371,6 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                             )
                                           ],
                                         ),
-                                        
                                       ),
                                     ],
                                   ),
@@ -1128,7 +1411,8 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                   child: Column(
                                     children: <Widget>[
                                       IconButton(
-                                          icon: Icon(Icons.date_range, size: 30, color:Colors.grey),
+                                          icon: Icon(Icons.date_range,
+                                              size: 30, color: Colors.amber),
                                           onPressed: () async {
                                             final List<DateTime> picked =
                                                 await DateRagePicker
@@ -1143,10 +1427,24 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                                             );
                                             if (picked != null &&
                                                 picked.length == 2) {
-                                              setState(() {
-                                                dariDate = picked[0];
-                                                sampaiDate = picked[1];
-                                              });
+                                              if (picked[0] != picked[1]) {
+                                                setState(() {
+                                                  dariDate = picked[0];
+                                                  sampaiDate = picked[1];
+                                                });
+                                              }else{
+                                                Flushbar(
+                                                  title: "Gagal",
+                                                  message: "Grafik tidak bisa menampilkan jika tanggal sama, silahkan pilih minimal rentang 1 hari",
+                                                  duration: Duration(seconds: 5),
+                                                  backgroundColor: Colors.red,
+                                                  flushbarPosition: FlushbarPosition.TOP,
+                                                  icon: Icon(
+                                                    Icons.error,
+                                                    color: Colors.white,
+                                                  ),
+                                                )..show(context);
+                                              }
                                             }
                                           }),
                                       Row(
@@ -1233,7 +1531,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
       lastDate: DateTime(DateTime.now().year + 50, 9),
     );
     if (picked != null && picked.length == 2) {
-      print(picked);
+//      print(picked);
       setState(() {
         datePendapatan = picked[0];
         toDatePendapatan = picked[1];
@@ -1251,7 +1549,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
       lastDate: DateTime(DateTime.now().year + 50, 9),
     );
     if (picked != null && picked.length == 2) {
-      print(picked);
+//      print(picked);
       setState(() {
         datePendapatanUnit = picked[0];
         toDatePendapatanUnit = picked[1];

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cakramedic/providers/booking.dart';
+import 'package:cakramedic/screens/page_lupa_password.dart';
 import 'package:cakramedic/screens/page_pendaftaran_pasien.dart';
-import 'package:cakramedic/widgets/bottomAnimation.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../style/theme.dart' as Theme;
-import '../utils/bubble_indication_painter.dart';
 
 class LoginPage extends StatefulWidget {
 //  static const routeName = '/login-screen';
@@ -51,10 +50,6 @@ class _LoginPageState extends State<LoginPage>
   final FocusNode myFocusNodeEmailLogin = FocusNode();
   final FocusNode myFocusNodePasswordLogin = FocusNode();
 
-  final FocusNode myFocusNodePassword = FocusNode();
-  final FocusNode myFocusNodeEmail = FocusNode();
-  final FocusNode myFocusNodeName = FocusNode();
-
   TextEditingController loginEmailController = new TextEditingController();
   TextEditingController loginPasswordController = new TextEditingController();
   bool isLoggedInBool = false;
@@ -65,17 +60,9 @@ class _LoginPageState extends State<LoginPage>
   bool _isAuthenticating = false;
 
   bool _obscureTextLogin = true;
-  bool _obscureTextSignup = true;
-  bool _obscureTextSignupConfirm = true;
   bool _saving = false;
   String newVersion;
   String deskripsi;
-
-  TextEditingController signupEmailController = new TextEditingController();
-  TextEditingController signupNameController = new TextEditingController();
-  TextEditingController signupPasswordController = new TextEditingController();
-  TextEditingController signupConfirmPasswordController =
-      new TextEditingController();
 
   PageController _pageController;
 
@@ -192,10 +179,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-//      backgroundColor: Colors.white,
         appBar: AppBar(
-//        backgroundColor: Colors.white,
-
           elevation: 1,
           title: Text('Login'),
         ),
@@ -209,8 +193,9 @@ class _LoginPageState extends State<LoginPage>
             child: new Form(
               key: _formKey,
               autovalidate: _autoValidate,
-              child: Center(
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                child: Align(
+                  alignment: Alignment.center,
                   child: Container(
                     width: MediaQuery
                         .of(context)
@@ -235,7 +220,7 @@ class _LoginPageState extends State<LoginPage>
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Padding(
-                            padding: EdgeInsets.only(top: 30.0),
+                            padding: EdgeInsets.only(top: 50.0),
                             child: Column(
                               children: <Widget>[
                                 new Image(
@@ -252,11 +237,6 @@ class _LoginPageState extends State<LoginPage>
                                         fontWeight: FontWeight.w700)),
                               ],
                             )),
-
-//                    Padding(
-//                      padding: EdgeInsets.only(top: 20.0),
-//                      child: _buildMenuBar(context),
-//                    ),
                         Container(
                           height: 30,
                         ),
@@ -284,7 +264,7 @@ class _LoginPageState extends State<LoginPage>
                                         style: TextStyle(
                                             color: Colors.grey[500],
                                             fontSize: 16.0,
-                                            fontFamily: "WorkSansMedium"),
+                                            fontFamily: "OpenSans-Regular"),
                                       ),
                                       Container(
                                         width: 5,
@@ -298,7 +278,7 @@ class _LoginPageState extends State<LoginPage>
                                               fontSize: 16.0,
                                               decoration:
                                               TextDecoration.underline,
-                                              fontFamily: "WorkSansMedium"),
+                                              fontFamily: "OpenSans-Regular"),
                                         ),
                                       ),
                                     ],
@@ -309,14 +289,18 @@ class _LoginPageState extends State<LoginPage>
                                 ),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    "Charlie hospital",
-                                    style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontSize: 16.0,
-                                        fontFamily: "WorkSansMedium"),
+                                  child: InkWell(
+                                    onTap: ()=> _openPageLupaPassword(),
+                                    child: Text(
+                                      "Lupa Password?",
+                                        style: TextStyle(
+                                            color: Colors.cyan[600],
+                                            fontSize: 16.0,
+                                            fontFamily: "OpenSans-Regular"),
+                                    ),
                                   ),
-                                )
+                                ),
+
                               ],
                             ),
                           ),
@@ -333,9 +317,6 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   void dispose() {
-    myFocusNodePassword.dispose();
-    myFocusNodeEmail.dispose();
-    myFocusNodeName.dispose();
     _pageController?.dispose();
     super.dispose();
   }
@@ -368,54 +349,6 @@ class _LoginPageState extends State<LoginPage>
       backgroundColor: Colors.blue,
       duration: Duration(seconds: 3),
     ));
-  }
-
-  Widget _buildMenuBar(BuildContext context) {
-    return Container(
-      width: 300.0,
-      height: 50.0,
-      decoration: BoxDecoration(
-        color: Color(0x552B2B2B),
-        borderRadius: BorderRadius.all(Radius.circular(25.0)),
-      ),
-      child: CustomPaint(
-        painter: TabIndicationPainter(pageController: _pageController),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Expanded(
-              child: FlatButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: _onSignInButtonPress,
-                child: Text(
-                  "Existing",
-                  style: TextStyle(
-                      color: left,
-                      fontSize: 16.0,
-                      fontFamily: "WorkSansSemiBold"),
-                ),
-              ),
-            ),
-            //Container(height: 33.0, width: 1.0, color: Colors.white),
-            Expanded(
-              child: FlatButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: _onSignUpButtonPress,
-                child: Text(
-                  "New",
-                  style: TextStyle(
-                      color: right,
-                      fontSize: 16.0,
-                      fontFamily: "WorkSansSemiBold"),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildSignIn(BuildContext context) {
@@ -618,12 +551,6 @@ class _LoginPageState extends State<LoginPage>
             LocalStorage.sharedInstance
                 .writeValue(key: 'theme', value: theme);
           }
-//          Navigator.pushReplacement(
-//            context,
-//            ScaleRoute(
-//                page: BottomMenu(
-//                )),
-//          );
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -644,19 +571,16 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
-  void _onSignInButtonPress() {
-    _pageController.animateToPage(0,
-        duration: Duration(milliseconds: 500), curve: Curves.decelerate);
-  }
-
-  void _onSignUpButtonPress() {
-    _pageController?.animateToPage(1,
-        duration: Duration(milliseconds: 500), curve: Curves.decelerate);
-  }
-
   void _toggleLogin() {
     setState(() {
       _obscureTextLogin = !_obscureTextLogin;
     });
+  }
+
+  _openPageLupaPassword() {
+    Navigator.push(
+      context,
+      ScaleRoute(page: page_lupa_password()),
+    );
   }
 }

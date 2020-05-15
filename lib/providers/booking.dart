@@ -152,4 +152,9 @@ class Api {
     print(url);
     return http.get(url);
   }
+  static Future lupaPassword(body) {
+    var url = baseUrl + "AkunPasien/lupaPassword/";
+    print(url);
+    return http.post(url,body: body);
+  }
 }
