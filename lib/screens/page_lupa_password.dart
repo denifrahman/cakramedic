@@ -23,7 +23,7 @@ class _page_lupa_passwordState extends State<page_lupa_password> {
   }
 
   bool _saving = false;
-  bool validMakun = false;
+  bool validMakun = true;
   bool _autoValidate = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode myFocusNodeEmailLogin = FocusNode();
@@ -98,7 +98,7 @@ class _page_lupa_passwordState extends State<page_lupa_password> {
                           child: Container(
                             child: new ConstrainedBox(
                               constraints: const BoxConstraints.expand(),
-                              child: _buildSignIn(context),
+                              child: !validMakun ? _buildSuccesSendPassword(context) : _buildSignIn(context),
                             ),
                           ),
                         ),
@@ -137,7 +137,19 @@ class _page_lupa_passwordState extends State<page_lupa_password> {
           ),
         ));
   }
-
+  Widget _buildSuccesSendPassword(BuildContext context){
+    var email = loginEmailController.text;
+    return Container(
+      margin: EdgeInsets.only(top:50, bottom: 50),
+      child: Column(
+        children: <Widget>[
+          Icon(Icons.check_circle,size: 70, color: Colors.green,),
+          Container(height: 15,),
+          Text('Password berhasil dikirim ke alamat \n $email \n Silahkan periksa email anda!',textAlign: TextAlign.center,),
+        ],
+      ),
+    );
+}
   Widget _buildSignIn(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 23.0),
@@ -176,7 +188,7 @@ class _page_lupa_passwordState extends State<page_lupa_password> {
                               color: Colors.black,
                               size: 22.0,
                             ),
-                            hintText: "Masukkan nomor RM",
+                            hintText: "Masukkan Email",
                             hintStyle: TextStyle(
                                 fontFamily: "OpenSans-Regular",
                                 fontSize: 16.0,
@@ -216,7 +228,7 @@ class _page_lupa_passwordState extends State<page_lupa_password> {
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: () => _chekNorm()),
+                    onPressed: () => _chekEmail()),
               ),
             ],
           ),
@@ -225,11 +237,11 @@ class _page_lupa_passwordState extends State<page_lupa_password> {
     );
   }
 
-  _chekNorm() {
+  _chekEmail() {
     if (loginEmailController.text.isEmpty) {
       Flushbar(
         title: "Warning",
-        message: "Silahkan isi nomor RM anda",
+        message: "Silahkan masukkan Email yang terdaftar",
         duration: Duration(seconds: 5),
         backgroundColor: Colors.orange,
         flushbarPosition: FlushbarPosition.TOP,
@@ -239,7 +251,11 @@ class _page_lupa_passwordState extends State<page_lupa_password> {
         ),
       )..show(context);
     } else {
-      Api.getByNoRm(loginEmailController.text).then((response) {
+      Map data = {
+        'email': loginEmailController.text,
+      };
+      var body = json.encode(data);
+      Api.chekNoEmail(body).then((response) {
         var result = json.decode(response.body);
         if (result['data'] != null) {
           print('data ada m_akun');
@@ -248,7 +264,17 @@ class _page_lupa_passwordState extends State<page_lupa_password> {
             validMakun = false;
           });
         } else {
-          print('data tidak ada m_akun');
+          Flushbar(
+            title: "Warning",
+            message: "Email anda tidak terdaftar di dalam sistem kami",
+            duration: Duration(seconds: 5),
+            backgroundColor: Colors.orange,
+            flushbarPosition: FlushbarPosition.TOP,
+            icon: Icon(
+              Icons.error_outline,
+              color: Colors.white,
+            ),
+          )..show(context);
           setState(() {
             validMakun = true;
           });

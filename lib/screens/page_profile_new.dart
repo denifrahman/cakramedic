@@ -196,10 +196,10 @@ class _page_profileState extends State<page_profile> {
       ScaleRoute(page: widget_riwayat_booking()),
     );
   } _openProfile() {
-    Navigator.push(
-      context,
-      ScaleRoute(page: widget_profile()),
-    );
+//    Navigator.push(
+//      context,
+//      ScaleRoute(page: widget_profile()),
+//    );
   }
 
   _openSetting() {

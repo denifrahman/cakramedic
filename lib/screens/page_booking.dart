@@ -16,7 +16,8 @@ import 'package:horizontal_calendar_widget/horizontal_calendar.dart';
 import 'package:random_string/random_string.dart';
 import 'dart:math' show Random;
 import 'package:flushbar/flushbar.dart';
-
+import 'package:tutorial_coach_mark/animated_focus_light.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class page_booking extends StatefulWidget {
   page_booking({Key key}) : super(key: key);
@@ -43,6 +44,8 @@ class _page_bookingState extends State<page_booking> {
   String noAntrian_data = '';
   String kodeBooking_data = randomAlphaNumeric(5);
   String jamBukaDokter = '00:00:00';
+
+  bool tutorial = false;
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   List<DropdownMenuItem<String>> _dropDownMenuPoliItems;
@@ -84,8 +87,22 @@ class _page_bookingState extends State<page_booking> {
   bool showValidIdAsuransi = false;
   bool showValidBoxIdPenjamin = false;
 
+  List<TargetFocus> targets = List();
+  List<TargetFocus> targets2 = List();
+  List<TargetFocus> targets3 = List();
+  List<TargetFocus> targets4 = List();
+  List<TargetFocus> targets5 = List();
+  List<TargetFocus> targets6 = List();
+  GlobalKey keyButton = GlobalKey();
+  GlobalKey keyButton2 = GlobalKey();
+  GlobalKey keyButton3 = GlobalKey();
+  GlobalKey keyButton4 = GlobalKey();
+  GlobalKey keyButton5 = GlobalKey();
+  GlobalKey keyButton6 = GlobalKey();
+
   @override
   void initState() {
+    checkIntroducing();
     _getUserdataLogin();
     _getPenjamin();
     _getPoliKlinik();
@@ -101,32 +118,331 @@ class _page_bookingState extends State<page_booking> {
     super.dispose();
   }
 
+  void checkIntroducing() async {
+    String isIntro =
+        await LocalStorage.sharedInstance.readValue('introBooking');
+    if (isIntro == null) {
+      setState(() {
+        tutorial = true;
+      });
+      initTargets();
+      WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    } else {
+      setState(() {
+        tutorial = false;
+      });
+    }
+  }
+
+  void _afterLayout(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial();
+    });
+  }
+
+  void showTutorial() {
+    TutorialCoachMark(
+      context,
+      targets: targets,
+      colorShadow: Colors.cyan[800],
+      paddingFocus: 10,
+      textSkip: ' ',
+      opacityShadow: 0.8,
+    )..show();
+  }
+
+  void showTutorial2() {
+    TutorialCoachMark(
+      context,
+      targets: targets2,
+      colorShadow: Colors.cyan[800],
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+    )..show();
+  }
+
+  void showTutorial3() {
+    TutorialCoachMark(
+      context,
+      targets: targets3,
+      colorShadow: Colors.cyan[800],
+      paddingFocus: 10,
+      textSkip: ' ',
+      opacityShadow: 0.8,
+    )..show();
+  }
+
+  void showTutorial4() {
+    TutorialCoachMark(
+      context,
+      targets: targets4,
+      colorShadow: Colors.cyan[800],
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+    )..show();
+  }
+
+  void showTutorial5() {
+    TutorialCoachMark(
+      context,
+      targets: targets5,
+      colorShadow: Colors.cyan[800],
+      paddingFocus: 10,
+      textSkip: ' ',
+      opacityShadow: 0.8,
+    )..show();
+  }
+
+  void showTutorial6() {
+    TutorialCoachMark(context,
+        targets: targets6,
+        textSkip: ' ',
+        colorShadow: Colors.cyan[800],
+        paddingFocus: 10,
+        opacityShadow: 0.8, finish: () {
+//          print("finish");
+      String setting_finger = '{"introBooking":"true"}';
+      LocalStorage.sharedInstance
+          .writeValue(key: 'introBooking', value: setting_finger);
+    })
+      ..show();
+  }
+
+  void initTargets() {
+    targets.add(TargetFocus(
+      identify: "Target 1",
+      keyTarget: keyButton,
+      contents: [
+        ContentTarget(
+            align: AlignContent.bottom,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Penjamin / Asuransi",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Image(
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.fill,
+                          image:
+                              new AssetImage('assets/tutorial/asuransi.png'))),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Silahkan pilih penjamin yang anda miliki, jika tidak menggunakan silahkan pilih Umum",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.RRect,
+    ));
+    targets2.add(TargetFocus(
+      identify: "Target 2",
+      keyTarget: keyButton2,
+      contents: [
+        ContentTarget(
+            align: AlignContent.bottom,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Selanjutnya",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lanjutkan ke langkah berikutnya!",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.RRect,
+    ));
+    targets3.add(TargetFocus(
+      identify: "Target 3",
+      keyTarget: keyButton3,
+      contents: [
+        ContentTarget(
+            align: AlignContent.top,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Selanjutnya",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "lanjutkan ke langkah berikutnya!",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.RRect,
+    ));
+    targets4.add(TargetFocus(
+      identify: "Target 4",
+      keyTarget: keyButton4,
+      contents: [
+        ContentTarget(
+            align: AlignContent.top,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Pilih Tanggal",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Silahkan pilih tanggal kedatangan anda",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.RRect,
+    ));
+    targets5.add(TargetFocus(
+      identify: "Target 5",
+      keyTarget: keyButton5,
+      contents: [
+        ContentTarget(
+            align: AlignContent.top,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Pilih Dokter",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Silahkan pilih Dokter",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.RRect,
+    ));
+    targets6.add(TargetFocus(
+      identify: "Target 6",
+      keyTarget: keyButton6,
+      contents: [
+        ContentTarget(
+            align: AlignContent.top,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Nomor Antrian",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Ini adalah estimasi nomor antrian anda bisa jadi setelah anda menekan tombol ya, antrian anda bisa menjadi lebih besar, karena sudah di booking pasien lain!",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.Circle,
+    ));
+  }
+
   void _getJadwalDokterByTglAndPoli() async {
     setState(() {
       _saving = true;
     });
-    Api.getJadwalDokterByTglAndPoli(DateFormat(
-        "yyyy-MM-dd",)
-        .format(_selectedDateBook), idUnit_data)
+    Api.getJadwalDokterByTglAndPoli(
+            DateFormat(
+              "yyyy-MM-dd",
+            ).format(_selectedDateBook),
+            idUnit_data)
         .then((response) {
       var result = json.decode(response.body);
-      if (result['status'] == 200) {
+      if (result['data'] == null) {
+        if (tutorial) {
+          showTutorial5();
+        }
         setState(() {
+          listDokter = null;
           _saving = false;
-          Iterable list = json.decode(response.body)['data'];
-          listDokter =
-              list.map((model) => MJadwalDokter.fromMap(model)).toList();
         });
       } else {
-        setState(() {
-          _saving = false;
-        });
+        if (result['status'] == 200) {
+          showTutorial5();
+          setState(() {
+            _saving = false;
+            Iterable list = json.decode(response.body)['data'];
+            listDokter =
+                list.map((model) => MJadwalDokter.fromMap(model)).toList();
+          });
+        } else {
+          setState(() {
+            _saving = false;
+          });
+        }
       }
     });
   }
 
-  _getSettingJam(){
-    Api.getSettingInitWaktuChekin().then((response){
+  _getSettingJam() {
+    Api.getSettingInitWaktuChekin().then((response) {
       var result = json.decode(response.body);
       setState(() {
         dataSetting = int.parse(result['data']['init_nilai_integer']);
@@ -134,8 +450,7 @@ class _page_bookingState extends State<page_booking> {
     });
   }
 
-
-   _getUserdataLogin() async {
+  _getUserdataLogin() async {
     String dataSession = await LocalStorage.sharedInstance.readValue('session');
     var result = json.decode(dataSession)['data'];
     setState(() {
@@ -230,9 +545,9 @@ class _page_bookingState extends State<page_booking> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool setting = true;
-    if(brightness == Brightness.dark){
+    if (brightness == Brightness.dark) {
       setting = true;
-    }else{
+    } else {
       setting = false;
     }
     initializeDateFormatting('in', null);
@@ -276,7 +591,9 @@ class _page_bookingState extends State<page_booking> {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-        title: Text('Booking',),
+        title: Text(
+          'Booking',
+        ),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _saving,
@@ -340,14 +657,18 @@ class _page_bookingState extends State<page_booking> {
                                               style:
                                                   TextStyle(color: Colors.grey),
                                             ),
-                                            Container(width: 10,),
+                                            Container(
+                                              width: 10,
+                                            ),
                                             Flexible(
                                               child: RichText(
                                                 overflow: TextOverflow.ellipsis,
-                                                strutStyle: StrutStyle(fontSize: 12.0),
+                                                strutStyle:
+                                                    StrutStyle(fontSize: 12.0),
                                                 text: TextSpan(
                                                     style: TextStyle(
-                                                      color: Colors.grey[800],),
+                                                      color: Colors.grey[800],
+                                                    ),
                                                     text: alamatPasien),
                                               ),
                                             ),
@@ -383,10 +704,12 @@ class _page_bookingState extends State<page_booking> {
                                           height: 5,
                                         ),
                                         Container(
+                                          key: keyButton,
                                           height: 60,
                                           width:
                                               MediaQuery.of(context).size.width,
-                                          padding: EdgeInsets.only(left: 10,right: 10, top: 5),
+                                          padding: EdgeInsets.only(
+                                              left: 10, right: 10, top: 5),
                                           decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: showValidBoxIdPenjamin
@@ -398,11 +721,14 @@ class _page_bookingState extends State<page_booking> {
                                                   BorderRadius.circular(4)),
                                           child: dataPasien.isEmpty
                                               ? DropdownButtonFormField<String>(
-                                            decoration: InputDecoration.collapsed(hintText: ''),
+                                                  decoration:
+                                                      InputDecoration.collapsed(
+                                                          hintText: ''),
                                                   hint: new Text(
                                                     "Pilih Penjamin",
                                                     style: TextStyle(
-                                                        color: Colors.grey, fontSize: 12),
+                                                        color: Colors.grey,
+                                                        fontSize: 12),
                                                   ),
                                                   value: penjaminPasien,
                                                   onChanged: (String newValue) {
@@ -420,7 +746,8 @@ class _page_bookingState extends State<page_booking> {
                                                       child: new Text(
                                                         item.penjaminNama
                                                             .toString(),
-                                                        style: TextStyle(fontSize: 13),
+                                                        style: TextStyle(
+                                                            fontSize: 13),
                                                       ),
                                                     );
                                                   }).toList(),
@@ -533,15 +860,18 @@ class _page_bookingState extends State<page_booking> {
                                               style:
                                                   TextStyle(color: Colors.grey),
                                             ),
-                                            Container(width: 10,),
+                                            Container(
+                                              width: 10,
+                                            ),
                                             Flexible(
                                               child: RichText(
                                                 overflow: TextOverflow.ellipsis,
-                                                strutStyle: StrutStyle(fontSize: 12.0),
+                                                strutStyle:
+                                                    StrutStyle(fontSize: 12.0),
                                                 text: TextSpan(
                                                     style: TextStyle(
-                                                        color: Colors
-                                                            .grey[800]),
+                                                        color:
+                                                            Colors.grey[800]),
                                                     text: alamatPasien),
                                               ),
                                             ),
@@ -563,11 +893,14 @@ class _page_bookingState extends State<page_booking> {
                                   Container(
                                     height: 30,
                                     padding: EdgeInsets.only(top: 10),
-                                    child: Text('Pilih Poliklinik'),
+                                    child: Text(
+                                      'Pilih Poliklinik',
+                                    ),
                                   ),
                                   Expanded(
                                       flex: 3,
                                       child: ListView.builder(
+                                          key: keyButton3,
                                           itemCount: listPoliKlinik.length,
                                           itemBuilder: (context, index) {
                                             return InkWell(
@@ -578,6 +911,7 @@ class _page_bookingState extends State<page_booking> {
                                                   listPoliKlinik[index]
                                                       .mInstalasiId),
                                               child: Card(
+                                                elevation: 3,
                                                 child: Container(
                                                   decoration: BoxDecoration(
 //                                                  color: Colors.cyan,
@@ -585,18 +919,18 @@ class _page_bookingState extends State<page_booking> {
                                                         BorderRadius.circular(
                                                             5.0),
                                                   ),
-                                                  margin:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 3.0,
-                                                          vertical: 3.0),
+                                                  margin: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 3.0,
+                                                      vertical: 3.0),
                                                   child: ListTile(
                                                     title: Text(
                                                       listPoliKlinik[index]
                                                           .unitNama,
-                                                      style: TextStyle(
-                                                        fontSize: 13
+                                                      style:
+                                                          TextStyle(fontSize: 13
 //                                                          color: Colors.white
-                                                      ),
+                                                              ),
                                                     ),
                                                   ),
                                                 ),
@@ -658,15 +992,18 @@ class _page_bookingState extends State<page_booking> {
                                               style:
                                                   TextStyle(color: Colors.grey),
                                             ),
-                                            Container(width: 10,),
+                                            Container(
+                                              width: 10,
+                                            ),
                                             Flexible(
                                               child: RichText(
                                                 overflow: TextOverflow.ellipsis,
-                                                strutStyle: StrutStyle(fontSize: 12.0),
+                                                strutStyle:
+                                                    StrutStyle(fontSize: 12.0),
                                                 text: TextSpan(
                                                     style: TextStyle(
-                                                        color: Colors
-                                                            .grey[800]),
+                                                        color:
+                                                            Colors.grey[800]),
                                                     text: alamatPasien),
                                               ),
                                             ),
@@ -691,6 +1028,7 @@ class _page_bookingState extends State<page_booking> {
                                   Container(
                                     padding: EdgeInsets.all(0),
                                     child: Column(
+                                      key: keyButton4,
                                       children: <Widget>[
                                         Row(
                                           mainAxisAlignment:
@@ -726,7 +1064,7 @@ class _page_bookingState extends State<page_booking> {
                                               fontWeight: FontWeight.w500),
                                           weekDayFormat: '',
                                           firstDate:
-                                          parsedDate.add(Duration(days: 0)),
+                                              parsedDate.add(Duration(days: 1)),
                                           lastDate: parsedDate.add(
                                             Duration(days: 7),
                                           ),
@@ -748,74 +1086,112 @@ class _page_bookingState extends State<page_booking> {
                                   ),
                                   Expanded(
                                       flex: 2,
-                                      child: ListView.builder(
-                                          itemCount: listDokter.length,
-                                          itemBuilder: (context, index) {
-                                            DateTime now = DateTime.now();
-                                            String formattedDate =
-                                                DateFormat('kk').format(now);
-                                            var jamAkhir = listDokter[index]
-                                                .jadwalpraktekJamAwal
-                                                .substring(0, 2);
-                                            bool jam = false;
-                                            if (int.parse(jamAkhir) >=
-                                                int.parse(formattedDate)) {
-                                              jam = true;
-                                            }
-                                            return InkWell(
-                                              onTap: () => _getNoRegistrasi(
-                                                  listDokter[index].pegawaiNama,
-                                                  listDokter[index].mPegawaiId,
-                                                  listDokter[index]
-                                                      .jadwalpraktekId,
-                                                  listDokter[index]
-                                                      .jadwalpraktekJamAwal),
-                                              child: Card(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
+                                      child: listDokter == null
+                                          ? Center(
+                                              child: Text(
+                                              'Data tidak ada \n Silahkan Pilih tanggal lain',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.grey[400]),
+                                            ))
+                                          : listDokter.length == 0
+                                              ? Text('Silahkan pilih tanggal')
+                                              : ListView.builder(
+                                                  itemCount: listDokter.length,
+                                                  key: keyButton5,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    DateTime now =
+                                                        DateTime.now();
+                                                    String formattedDate =
+                                                        DateFormat('kk')
+                                                            .format(now);
+                                                    var jamAkhir = listDokter[
+                                                            index]
+                                                        .jadwalpraktekJamAwal
+                                                        .substring(0, 2);
+                                                    bool jam = false;
+                                                    if (int.parse(jamAkhir) >=
+                                                        int.parse(
+                                                            formattedDate)) {
+                                                      jam = true;
+                                                    }
+                                                    return InkWell(
+                                                      onTap: () => _getNoRegistrasi(
+                                                          listDokter[index]
+                                                              .pegawaiNama,
+                                                          listDokter[index]
+                                                              .mPegawaiId,
+                                                          listDokter[index]
+                                                              .jadwalpraktekId,
+                                                          listDokter[index]
+                                                              .jadwalpraktekJamAwal),
+                                                      child: Card(
+                                                        elevation: 3,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
 //                                                  color: Colors.cyan,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
-                                                  ),
-                                                  margin:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 3.0,
-                                                          vertical: 3.0),
-                                                  child: ListTile(
-                                                    title: Text(
-                                                      listDokter[index]
-                                                          .pegawaiNama,style: TextStyle(fontSize: 13),
-                                                    ),
-                                                    trailing: Container(
-                                                      padding: EdgeInsets.all(5),
-                                                      child: Column(
-                                                        children: <Widget>[
-                                                          Text(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5.0),
+                                                          ),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      3.0,
+                                                                  vertical:
+                                                                      3.0),
+                                                          child: ListTile(
+                                                            title: Text(
                                                               listDokter[index]
-                                                                  .jadwalpraktekJamAwal
-                                                                  .substring(
-                                                                      0, 5),
-                                                              style: TextStyle( fontSize: 12)),
-                                                          Icon(
-                                                            Icons.arrow_downward,
-                                                            size: 12,
+                                                                  .pegawaiNama,
+                                                              style: TextStyle(
+                                                                  fontSize: 13),
+                                                            ),
+                                                            trailing: Container(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(5),
+                                                              child: Column(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Text(
+                                                                      listDokter[
+                                                                              index]
+                                                                          .jadwalpraktekJamAwal
+                                                                          .substring(
+                                                                              0,
+                                                                              5),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              12)),
+                                                                  Icon(
+                                                                    Icons
+                                                                        .arrow_downward,
+                                                                    size: 12,
+                                                                  ),
+                                                                  Text(
+                                                                    listDokter[
+                                                                            index]
+                                                                        .jadwalpraktekJamAkhir
+                                                                        .substring(
+                                                                            0,
+                                                                            5),
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            12),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
                                                           ),
-                                                          Text(
-                                                            listDokter[index]
-                                                                .jadwalpraktekJamAkhir
-                                                                .substring(0, 5),
-                                                            style: TextStyle(
-                                                                 fontSize: 12),
-                                                          ),
-                                                        ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          })),
+                                                    );
+                                                  })),
                                   Container(
                                     height: 5,
                                   )
@@ -920,7 +1296,8 @@ class _page_bookingState extends State<page_booking> {
                                                 height: 140,
 //                                      color: Colors.black2,
                                                 child: QrImage(
-                                                  data: kodeBooking_data.toUpperCase(),
+                                                  data: kodeBooking_data
+                                                      .toUpperCase(),
                                                   version: QrVersions.auto,
                                                   size: 300.0,
                                                 ),
@@ -1003,6 +1380,7 @@ class _page_bookingState extends State<page_booking> {
                                               BorderRadius.circular(5),
                                           color: Colors.cyan),
                                       child: InkWell(
+                                        key: keyButton2,
                                         onTap: () => next(),
                                         child: Center(
                                             child: Text(
@@ -1080,6 +1458,9 @@ class _page_bookingState extends State<page_booking> {
           });
         }
       } else {
+        if (tutorial) {
+          showTutorial3();
+        }
         currentStep + 1 != 5
             ? goTo(currentStep + 1)
             : setState(() => complete = true);
@@ -1099,6 +1480,9 @@ class _page_bookingState extends State<page_booking> {
   }
 
   void _onchangePenjamin(String newValue) {
+    if (tutorial) {
+      showTutorial2();
+    }
     if (newValue == '1') {
       setState(() {
         showNumberAsuransi = false;
@@ -1112,6 +1496,9 @@ class _page_bookingState extends State<page_booking> {
   }
 
   _selectedPoli(idUnit, namaUnit, idInstalasi) {
+    if (tutorial) {
+      showTutorial4();
+    }
     listDokter = [];
     next();
     setState(() {
@@ -1128,7 +1515,7 @@ class _page_bookingState extends State<page_booking> {
       jamBukaDokter = jamBuka;
     });
     var dateBook = DateFormat("yyyy-MM-dd").format(_selectedDateBook);
-    Api.getNoRegistrasi(dateBook,jadwalId).then((response) {
+    Api.getNoRegistrasi(dateBook, jadwalId).then((response) {
       var result = json.decode(response.body);
       if (result['meta']['success'] == true) {
         int count = int.parse(result['data'][0]['antrian_terakhir']) + 1;
@@ -1139,6 +1526,9 @@ class _page_bookingState extends State<page_booking> {
           noAntrian_data = noAntrian;
           _saving = !_saving;
         });
+        if (tutorial) {
+          showTutorial6();
+        }
       }
     });
   }
@@ -1146,9 +1536,9 @@ class _page_bookingState extends State<page_booking> {
   _alertBookingNow(namaDokter, noAntrian, mPegawaiId, jadwalId) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool setting = true;
-    if(brightness == Brightness.dark){
+    if (brightness == Brightness.dark) {
       setting = true;
-    }else{
+    } else {
       setting = false;
     }
     var width = MediaQuery.of(context).size.width;
@@ -1215,7 +1605,9 @@ class _page_bookingState extends State<page_booking> {
                       'Alamat',
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
-                    Container(width: 10,),
+                    Container(
+                      width: 10,
+                    ),
                     Flexible(
                       child: RichText(
                         overflow: TextOverflow.ellipsis,
@@ -1266,6 +1658,7 @@ class _page_bookingState extends State<page_booking> {
                         textAlign: TextAlign.end,
                         style: TextStyle(fontSize: 12)),
                     Text(noAntrian,
+                        key: keyButton6,
                         textAlign: TextAlign.end,
                         style: TextStyle(fontSize: 14)),
                   ],
@@ -1282,7 +1675,9 @@ class _page_bookingState extends State<page_booking> {
               },
             ),
             new FlatButton(
-              child: new Text("Iya",),
+              child: new Text(
+                "Iya",
+              ),
               onPressed: () {
                 _bookingNow(mPegawaiId, jadwalId, noAntrian);
               },

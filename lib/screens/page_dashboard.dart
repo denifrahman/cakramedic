@@ -1,10 +1,11 @@
+import 'package:cakramedic/LocalBindings.dart';
 import 'package:cakramedic/screens/page_detail_booking.dart';
 import 'package:cakramedic/widgets/navigation_scale.dart';
 import 'package:cakramedic/widgets/widget_home_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+
 
 class dashboard_screen extends StatefulWidget {
   dashboard_screen({Key key}) : super(key: key);

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 //const baseUrl = "https://api-resource.cakramedic.com/index.php/";
-//const baseUrl = "http://103.135.0.106:2020/api_mobile_charlie/index.php/";
-const baseUrl = "http://192.168.0.8:8888/api-simrs-cakra/index.php/";
+const baseUrl = "http://103.135.0.106:2020/api_mobile_charlie/index.php/";
+//const baseUrl = "http://192.168.0.8:8888/api-simrs-cakra/index.php/";
 
 class Api {
   static Future getDokter(unit) {
@@ -54,6 +54,11 @@ class Api {
   static Future chekNoTelp(noTelp) {
     var url = baseUrl + "/AkunPasien/chek_no_telp/"+noTelp;
     return http.get(url);
+  }
+  static Future chekNoEmail(email) {
+    var url = baseUrl + "/AkunPasien/chek_email/";
+    print(url);
+    return http.post(url,body: email);
   }
   static Future loginPost(body) {
     var url = baseUrl + "/LoginAndroid/loginPasien";

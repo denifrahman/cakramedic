@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:ui';
-import 'package:cakramedic/screens/finger_print.dart';
+import 'package:tutorial_coach_mark/animated_focus_light.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:cakramedic/screens/page_unit.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:cakramedic/LocalBindings.dart';
 import 'package:cakramedic/screens/page_booking.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:cakramedic/screens/page_jadwal_dokter.dart';
 import 'package:cakramedic/screens/page_profile_faskes.dart';
 import 'package:cakramedic/widgets/navigation_scale.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,8 +24,18 @@ class _widget_home_menuState extends State<widget_home_menu> {
 
   String akunpasien_no_rm, akunpasien_nama_akun,akunpasien_no_telpn;
   final Map<String, String> data = {};
+
+  List<TargetFocus> targets = List();
+  GlobalKey keyButton = GlobalKey();
+  GlobalKey keyButton2 = GlobalKey();
+  GlobalKey keyButton3 = GlobalKey();
+  GlobalKey keyButton4 = GlobalKey();
+  GlobalKey keyButton5 = GlobalKey();
+
+
   @override
   void initState() {
+    checkIntroducing();
     _getDataPasien();
     super.initState();
   }
@@ -34,6 +44,109 @@ class _widget_home_menuState extends State<widget_home_menu> {
   void dispose() {
     super.dispose();
   }
+
+  void checkIntroducing() async {
+    String isIntro = await LocalStorage.sharedInstance.readValue('introLinkBooking');
+    if(isIntro == null){
+      initTargets();
+      WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    }
+  }
+  void _afterLayout(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial();
+    });
+  }
+  void showTutorial() {
+    TutorialCoachMark(context,
+        targets: targets,
+        colorShadow: Colors.cyan,
+        paddingFocus: 10,
+        opacityShadow: 0.8, finish: () {
+//          print("finish");
+          String setting_finger = '{"introLinkBooking":"true"}';
+          LocalStorage.sharedInstance
+              .writeValue(key: 'introLinkBooking', value: setting_finger);
+        }, clickTarget: (target) {
+          print(target.identify);
+          if(target.identify == 'Target 2'){
+          }
+        }, clickSkip: () {
+//          print("skip");
+//          String setting_finger = '{"intro":"true"}';
+//          LocalStorage.sharedInstance
+//              .writeValue(key: 'intro', value: setting_finger);
+        })
+      ..show();
+  }
+  void initTargets() {
+    targets.add(TargetFocus(
+      identify: "Target 1",
+      keyTarget: keyButton,
+      contents: [
+        ContentTarget(
+            align: AlignContent.bottom,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Feature Booking",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Anda dapat melakaukan booking online di menu ini, Pilih penjamin, pilih jadwal dokter selesai, anda sudah mendapatkan kode booking ",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.Circle,
+    ));
+
+    targets.add(TargetFocus(
+      identify: "Target 2",
+      keyTarget: keyButton2,
+      contents: [
+        ContentTarget(
+            align: AlignContent.bottom,
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Text(
+                      "Pilih rentang tanggal",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0),
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Image(
+                          width: 180,
+                          fit: BoxFit.fill,
+                          image: new AssetImage('assets/tutorial/tips1.gif'))
+                  ),
+                ],
+              ),
+            ))
+      ],
+      shape: ShapeLightFocus.Circle,
+    ));
+  }
+
+
   _openBooking() {
     Navigator.push(
       context,
@@ -136,6 +249,7 @@ class _widget_home_menuState extends State<widget_home_menu> {
                       child: new Center(
                         child: Icon(
                           FontAwesomeIcons.bookMedical,
+                          key:keyButton,
                           size: 24,
                           color: Colors.orange,
                         ),

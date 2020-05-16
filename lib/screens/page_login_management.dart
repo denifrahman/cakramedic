@@ -340,7 +340,7 @@ class _LoginPageManagementState extends State<LoginPageManagement>
   void initState() {
     super.initState();
 //    versionCheck(context);
-    chekSession();
+//    chekSession();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -448,7 +448,7 @@ class _LoginPageManagementState extends State<LoginPageManagement>
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.phone,
+                              Icons.email,
                               color: Colors.black,
                               size: 22.0,
                             ),

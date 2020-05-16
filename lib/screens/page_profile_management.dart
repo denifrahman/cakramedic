@@ -189,7 +189,7 @@ class _page_profile_managementState extends State<page_profile_management> {
   }
 
   void keluar() {
-    LocalStorage.sharedInstance.deleteValue('session');
+//    LocalStorage.sharedInstance.deleteValue('session');
     Navigator.pushAndRemoveUntil(
         context,
         PageRouteBuilder(pageBuilder: (BuildContext context,

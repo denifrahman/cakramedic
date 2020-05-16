@@ -32,6 +32,7 @@ class _page_pendaftaran_pasienState extends State<page_pendaftaran_pasien> {
   String mPasienId = "";
   String mPasienAktif = "";
   bool validTelp = false;
+  bool validEmail = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = true;
@@ -208,6 +209,7 @@ class _page_pendaftaran_pasienState extends State<page_pendaftaran_pasien> {
                   TextFormField(
                     controller: inputEmailController,
                     validator: validateEmail,
+//                    onChanged: (value){_chekEmail(value);},
                     decoration: InputDecoration(
                         labelText: "Email", hasFloatingPlaceholder: true),
                   ),
@@ -380,8 +382,11 @@ class _page_pendaftaran_pasienState extends State<page_pendaftaran_pasien> {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
+    _chekEmail(value);
     if (!regex.hasMatch(value))
       return 'Enter Valid Email';
+    else if(!validEmail)
+      return 'Email Sudah digunakan';
     else
       return null;
   }
@@ -409,6 +414,27 @@ class _page_pendaftaran_pasienState extends State<page_pendaftaran_pasien> {
       }else{
         setState(() {
           validTelp = false;
+        });
+      }
+    });
+  }
+
+  void _chekEmail(String value) {
+    Map data = {
+      'email': value,
+    };
+    var body = json.encode(data);
+    Api.chekNoEmail(body).then((response){
+      var result = json.decode(response.body);
+//      print(result);
+      if(result['data'] == null ){
+//        print(result['data']);
+        setState(() {
+          validEmail = true;
+        });
+      }else{
+        setState(() {
+          validEmail = false;
         });
       }
     });
