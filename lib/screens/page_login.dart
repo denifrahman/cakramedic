@@ -220,11 +220,11 @@ class _LoginPageState extends State<LoginPage>
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Padding(
-                            padding: EdgeInsets.only(top: 50.0),
+                            padding: EdgeInsets.only(top: 30.0),
                             child: Column(
                               children: <Widget>[
                                 new Image(
-                                    width: 120,
+                                    width: 100,
 //                      height: 191.0,
                                     fit: BoxFit.fill,
                                     image: new AssetImage('assets/logo.png')),
@@ -233,7 +233,7 @@ class _LoginPageState extends State<LoginPage>
                                 ),
                                 Text('CHARLIE HOSPITAL',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w700)),
                               ],
                             )),
@@ -250,7 +250,6 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                         Expanded(
-                          flex: 1,
                           child: Container(
                             padding: EdgeInsets.only(left: 20, right: 20),
                             child: Column(
@@ -377,7 +376,7 @@ class _LoginPageState extends State<LoginPage>
                         child: TextFormField(
                           focusNode: myFocusNodeEmailLogin,
                           controller: loginEmailController,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.phone,
                           style: TextStyle(
                               fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,

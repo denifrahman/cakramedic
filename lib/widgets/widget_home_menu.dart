@@ -35,7 +35,6 @@ class _widget_home_menuState extends State<widget_home_menu> {
 
   @override
   void initState() {
-    checkIntroducing();
     _getDataPasien();
     super.initState();
   }
@@ -47,6 +46,7 @@ class _widget_home_menuState extends State<widget_home_menu> {
 
   void checkIntroducing() async {
     String isIntro = await LocalStorage.sharedInstance.readValue('introLinkBooking');
+    print(isIntro);
     if(isIntro == null){
       initTargets();
       WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
@@ -111,39 +111,6 @@ class _widget_home_menuState extends State<widget_home_menu> {
       ],
       shape: ShapeLightFocus.Circle,
     ));
-
-    targets.add(TargetFocus(
-      identify: "Target 2",
-      keyTarget: keyButton2,
-      contents: [
-        ContentTarget(
-            align: AlignContent.bottom,
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: Text(
-                      "Pilih rentang tanggal",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Image(
-                          width: 180,
-                          fit: BoxFit.fill,
-                          image: new AssetImage('assets/tutorial/tips1.gif'))
-                  ),
-                ],
-              ),
-            ))
-      ],
-      shape: ShapeLightFocus.Circle,
-    ));
   }
 
 
@@ -170,10 +137,10 @@ class _widget_home_menuState extends State<widget_home_menu> {
   _getDataPasien() async{
     String dataSession = await LocalStorage.sharedInstance.readValue('session');
     var result = json.decode(dataSession)['data'];
-//    print(result);
     data["akunpasien_no_rm"] = result['akunpasien_no_rm'];
     data["akunpasien_nama_akun"] = result['akunpasien_nama_akun'];
     data["akunpasien_no_telpn"] = result['akunpasien_no_telpn'];
+    checkIntroducing();
   }
 
   @override
@@ -211,10 +178,11 @@ class _widget_home_menuState extends State<widget_home_menu> {
                             tileMode: TileMode.clamp),
                       ),
                       child: new Center(
-                        child: Icon(
-                          FontAwesomeIcons.notesMedical,
-                          size: 24,
-                          color: Colors.pink,
+                        child:
+                        IconButton(
+                          icon: Icon(
+                            FontAwesomeIcons.solidClock, color: Colors.pink,),
+                          onPressed: () => _openProfileFaskes(),
                         ),
                       )),
                 ),
@@ -228,33 +196,30 @@ class _widget_home_menuState extends State<widget_home_menu> {
           Container(
             child: Column(
               children: <Widget>[
-                InkWell(
-                  onTap: () => _openBooking(),
-                  child: new Container(
-                      height: 50,
-                      width: 50,
-                      margin: EdgeInsets.only(bottom: 6),
-                      decoration: new BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        gradient: new LinearGradient(
-                            colors: [
-                              Colors.orange.withOpacity(0.1),
-                              Colors.white
-                            ],
-                            begin: const FractionalOffset(7.0, 10.1),
-                            end: const FractionalOffset(0.0, 0.0),
-                            stops: [0.0, 1.0],
-                            tileMode: TileMode.clamp),
+                new Container(
+                    height: 50,
+                    width: 50,
+                    margin: EdgeInsets.only(bottom: 6),
+                    decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                      gradient: new LinearGradient(
+                          colors: [
+                            Colors.orange.withOpacity(0.1),
+                            Colors.white
+                          ],
+                          begin: const FractionalOffset(7.0, 10.1),
+                          end: const FractionalOffset(0.0, 0.0),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.clamp),
+                    ),
+                    child: new Center(
+                      child: IconButton(
+                        key: keyButton,
+                        icon: Icon(
+                          FontAwesomeIcons.bookMedical, color: Colors.orange,),
+                        onPressed: () => _openBooking(),
                       ),
-                      child: new Center(
-                        child: Icon(
-                          FontAwesomeIcons.bookMedical,
-                          key:keyButton,
-                          size: 24,
-                          color: Colors.orange,
-                        ),
-                      )),
-                ),
+                    )),
                 Text(
                   'Booking',
                   style: TextStyle(fontSize: 13),
@@ -265,32 +230,30 @@ class _widget_home_menuState extends State<widget_home_menu> {
           Container(
             child: Column(
               children: <Widget>[
-                InkWell(
-                  onTap: () => _openJadwalDokter(),
-                  child: new Container(
-                      height: 50,
-                      width: 50,
-                      margin: EdgeInsets.only(bottom: 6),
-                      decoration: new BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        gradient: new LinearGradient(
-                            colors: [
-                              Colors.blueAccent.withOpacity(0.1),
-                              Colors.white
-                            ],
-                            begin: const FractionalOffset(7.0, 10.1),
-                            end: const FractionalOffset(0.0, 0.0),
-                            stops: [0.0, 1.0],
-                            tileMode: TileMode.clamp),
+                new Container(
+                    height: 50,
+                    width: 50,
+                    margin: EdgeInsets.only(bottom: 6),
+                    decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                      gradient: new LinearGradient(
+                          colors: [
+                            Colors.blueAccent.withOpacity(0.1),
+                            Colors.white
+                          ],
+                          begin: const FractionalOffset(7.0, 10.1),
+                          end: const FractionalOffset(0.0, 0.0),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.clamp),
+                    ),
+                    child: new Center(
+                      child:
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons.solidClock,
+                          color: Colors.blueAccent,),
+                        onPressed: () => _openJadwalDokter(),
                       ),
-                      child: new Center(
-                        child: Icon(
-                          FontAwesomeIcons.solidClock,
-                          size: 24,
-                          color: Colors.blueAccent,
-                        ),
-                      )),
-                ),
+                    )),
                 Text(
                   'Jadwal',
                   style: TextStyle(fontSize: 13),
@@ -301,32 +264,30 @@ class _widget_home_menuState extends State<widget_home_menu> {
           Container(
             child: Column(
               children: <Widget>[
-                InkWell(
-                  onTap: () => _modalBottomSheetMenu(context, data),
-                  child: new Container(
-                      height: 50,
-                      width: 50,
-                      margin: EdgeInsets.only(bottom: 6),
-                      decoration: new BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        gradient: new LinearGradient(
-                            colors: [
-                              Color(0xff00b894).withOpacity(0.1),
-                              Colors.white
-                            ],
-                            begin: const FractionalOffset(7.0, 10.1),
-                            end: const FractionalOffset(0.0, 0.0),
-                            stops: [0.0, 1.0],
-                            tileMode: TileMode.clamp),
+                new Container(
+                    height: 50,
+                    width: 50,
+                    margin: EdgeInsets.only(bottom: 6),
+                    decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                      gradient: new LinearGradient(
+                          colors: [
+                            Color(0xff00b894).withOpacity(0.1),
+                            Colors.white
+                          ],
+                          begin: const FractionalOffset(7.0, 10.1),
+                          end: const FractionalOffset(0.0, 0.0),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.clamp),
+                    ),
+                    child: new Center(
+                      child:
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons.externalLinkSquareAlt,
+                          color: Color(0xff00b894),),
+                        onPressed: () => _modalBottomSheetMenu(context, data),
                       ),
-                      child: new Center(
-                        child: Icon(
-                          FontAwesomeIcons.externalLinkSquareAlt,
-                          size: 24,
-                          color: Color(0xff00b894),
-                        ),
-                      )),
-                ),
+                    )),
                 Text(
                   'Lainnya',
                   style: TextStyle(fontSize: 13),

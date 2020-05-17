@@ -235,7 +235,7 @@ class _LoginPageManagementState extends State<LoginPageManagement>
                             child: Column(
                               children: <Widget>[
                                 new Image(
-                                    width: 120,
+                                    width: 100,
 //                      height: 191.0,
                                     fit: BoxFit.fill,
                                     image: new AssetImage('assets/logo.png')),
@@ -244,7 +244,7 @@ class _LoginPageManagementState extends State<LoginPageManagement>
                                 ),
                                 Text('CHARLIE HOSPITAL',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w700)),
                               ],
                             )),

@@ -102,7 +102,6 @@ class _page_bookingState extends State<page_booking> {
 
   @override
   void initState() {
-    checkIntroducing();
     _getUserdataLogin();
     _getPenjamin();
     _getPoliKlinik();
@@ -133,12 +132,42 @@ class _page_bookingState extends State<page_booking> {
       });
     }
   }
-
   void _afterLayout(_) {
     Future.delayed(Duration(milliseconds: 100), () {
       showTutorial();
     });
   }
+
+  void _afterLayout2(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial2();
+    });
+  }
+
+  void _afterLayout3(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial3();
+    });
+  }
+
+  void _afterLayout4(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial4();
+    });
+  }
+
+  void _afterLayout5(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial5();
+    });
+  }
+
+  void _afterLayout6(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial6();
+    });
+  }
+
 
   void showTutorial() {
     TutorialCoachMark(
@@ -290,7 +319,7 @@ class _page_bookingState extends State<page_booking> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Selanjutnya",
+                    "Poli Klinik",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -299,7 +328,7 @@ class _page_bookingState extends State<page_booking> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "lanjutkan ke langkah berikutnya!",
+                      "Silakan pilih poliklinik!",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -417,7 +446,7 @@ class _page_bookingState extends State<page_booking> {
       var result = json.decode(response.body);
       if (result['data'] == null) {
         if (tutorial) {
-          showTutorial5();
+          WidgetsBinding.instance.addPostFrameCallback(_afterLayout5);
         }
         setState(() {
           listDokter = null;
@@ -425,7 +454,7 @@ class _page_bookingState extends State<page_booking> {
         });
       } else {
         if (result['status'] == 200) {
-          showTutorial5();
+          WidgetsBinding.instance.addPostFrameCallback(_afterLayout5);
           setState(() {
             _saving = false;
             Iterable list = json.decode(response.body)['data'];
@@ -517,7 +546,7 @@ class _page_bookingState extends State<page_booking> {
       setState(() {
         Iterable list = json.decode(response.body)['data'];
         dataPenjamin = list.map((model) => MPenjamin.fromMap(model)).toList();
-        print(dataPenjamin[2].penjaminNama);
+        checkIntroducing();
       });
     });
   }
@@ -678,21 +707,12 @@ class _page_bookingState extends State<page_booking> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  height: 15,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                          width: 1.0,
-                                          color: Color(0xFFFF000000)),
-                                    ),
-                                  ),
-                                ),
+                                Divider(color: Colors.grey[800],),
                                 Container(
                                   height: 20,
                                 ),
                                 Align(
-                                  alignment: Alignment.centerLeft,
+                                  alignment: Alignment.center,
                                   child: Container(
                                     child: Column(
                                       crossAxisAlignment:
@@ -706,8 +726,8 @@ class _page_bookingState extends State<page_booking> {
                                         Container(
                                           key: keyButton,
                                           height: 60,
-                                          width:
-                                              MediaQuery.of(context).size.width,
+//                                          width:
+//                                              MediaQuery.of(context).size.width - 40,
                                           padding: EdgeInsets.only(
                                               left: 10, right: 10, top: 5),
                                           decoration: BoxDecoration(
@@ -719,7 +739,8 @@ class _page_bookingState extends State<page_booking> {
                                               ),
                                               borderRadius:
                                                   BorderRadius.circular(4)),
-                                          child: dataPasien.isEmpty
+                                          child:
+                                          dataPasien.isEmpty
                                               ? DropdownButtonFormField<String>(
                                                   decoration:
                                                       InputDecoration.collapsed(
@@ -877,30 +898,23 @@ class _page_bookingState extends State<page_booking> {
                                             ),
                                           ],
                                         ),
+                                        Divider(color: Colors.grey[800],),
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    height: 0.1,
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                            width: 1.0,
-                                            color: Color(0xFFFF000000)),
-                                      ),
-                                    ),
-                                  ),
+
                                   Container(
                                     height: 30,
-                                    padding: EdgeInsets.only(top: 10),
+//                                    padding: EdgeInsets.only(top: 10,bottom: 10),
                                     child: Text(
                                       'Pilih Poliklinik',
                                     ),
                                   ),
+
                                   Expanded(
-                                      flex: 3,
+                                      flex: 4,
+                                      key: keyButton3,
                                       child: ListView.builder(
-                                          key: keyButton3,
                                           itemCount: listPoliKlinik.length,
                                           itemBuilder: (context, index) {
                                             return InkWell(
@@ -1009,17 +1023,8 @@ class _page_bookingState extends State<page_booking> {
                                             ),
                                           ],
                                         ),
+                                        Divider(color: Colors.grey[800],),
                                       ],
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 3,
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                            width: 1.0,
-                                            color: Color(0xFFFF000000)),
-                                      ),
                                     ),
                                   ),
                                   Container(
@@ -1085,7 +1090,7 @@ class _page_bookingState extends State<page_booking> {
                                     ),
                                   ),
                                   Expanded(
-                                      flex: 2,
+                                      flex: 3,
                                       child: listDokter == null
                                           ? Center(
                                               child: Text(
@@ -1459,7 +1464,7 @@ class _page_bookingState extends State<page_booking> {
         }
       } else {
         if (tutorial) {
-          showTutorial3();
+          WidgetsBinding.instance.addPostFrameCallback(_afterLayout3);
         }
         currentStep + 1 != 5
             ? goTo(currentStep + 1)
@@ -1481,7 +1486,7 @@ class _page_bookingState extends State<page_booking> {
 
   void _onchangePenjamin(String newValue) {
     if (tutorial) {
-      showTutorial2();
+      WidgetsBinding.instance.addPostFrameCallback(_afterLayout2);
     }
     if (newValue == '1') {
       setState(() {
@@ -1497,7 +1502,7 @@ class _page_bookingState extends State<page_booking> {
 
   _selectedPoli(idUnit, namaUnit, idInstalasi) {
     if (tutorial) {
-      showTutorial4();
+      WidgetsBinding.instance.addPostFrameCallback(_afterLayout4);
     }
     listDokter = [];
     next();
@@ -1527,7 +1532,7 @@ class _page_bookingState extends State<page_booking> {
           _saving = !_saving;
         });
         if (tutorial) {
-          showTutorial6();
+          WidgetsBinding.instance.addPostFrameCallback(_afterLayout6);
         }
       }
     });
