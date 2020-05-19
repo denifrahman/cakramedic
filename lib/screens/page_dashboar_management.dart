@@ -230,7 +230,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
     setState(() {
       _saving = true;
     });
-    Api.getAllPoliKlinik().then((response) {
+    Api.getAllUnit().then((response) {
       var result = json.decode(response.body);
       if (result['status'] == 200) {
         setState(() {

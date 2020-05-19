@@ -42,6 +42,11 @@ class Api {
     var url = baseUrl + "/poliklinik";
     return http.get(url);
   }
+
+  static Future getAllUnit() {
+    var url = baseUrl + "/unit";
+    return http.get(url);
+  }
   static Future getByNoRm(noRm) {
     var url = baseUrl + "AkunPasien/get_by_no_rm/"+noRm;
     return http.get(url);
