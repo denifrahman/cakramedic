@@ -2,7 +2,7 @@ import 'package:cakramedic/screens/page_bottom_menu.dart';
 import 'package:cakramedic/screens/page_login.dart';
 import 'package:cakramedic/screens/page_portal.dart';
 import 'package:cakramedic/screens/page_splash.dart';
-import 'package:cakramedic/utils/ThemeChanger.dart';
+import 'package:cakramedic/utils/DataProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,27 +14,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  @override
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(),
-      child: Consumer<ThemeNotifier>(
-        builder: (context, ThemeNotifier notifier, child) {
-          return MaterialApp(
-            title: 'Flutter Theme Provider',
-            theme: !notifier.darkTheme ? dark : light,
-            home: SplaceScreen(),
-            initialRoute: '/',
-            routes: {
-              '/splace-screen': (context) => SplaceScreen(),
-              '/portal': (context) => page_portal(),
-              '/login': (context) => LoginPage(),
-              '/dashboard': (context) => BottomMenu(),
-            },
-          );
-        },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<DataProvider>(
+          create: (_) => DataProvider(),
+        )
+      ],
+      child: Consumer<DataProvider>(
+        builder: (context, DataProvider notifier, child) => MaterialApp(
+          title: 'Flutter Theme Provider',
+          theme: !notifier.darkTheme ? dark : light,
+          home: SplaceScreen(),
+          initialRoute: '/',
+          routes: {
+            '/splace-screen': (context) => SplaceScreen(),
+            '/portal': (context) => page_portal(),
+            '/login': (context) => LoginPage(),
+            '/dashboard': (context) => BottomMenu(),
+          },
+        ),
       ),
     );
   }

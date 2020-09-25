@@ -1,6 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:cakramedic/widgets/WidgetPendapatanTunaiUnitPenjamin.dart';
+import 'package:cakramedic/widgets/WidgetTotalPasien.dart';
+import 'package:cakramedic/widgets/widgetPendapatan.dart';
+import 'package:provider/provider.dart';
 import 'package:cakramedic/LocalBindings.dart';
+import 'package:cakramedic/utils/DataProvider.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:cakramedic/models/Farmasi.dart';
@@ -39,17 +44,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
   bool _saving = false;
   final ind = Currency.create('IN', 0, symbol: 'Rp', pattern: 'S ###,###');
   TabController _controller;
+
   @override
   void initState() {
     super.initState();
     checkIntroducing();
-    _getPoliKlinik();
-    _getPenjamin();
-    _getPendapatan();
-    _getAllPasien();
+//    _getPoliKlinik();
+//    _getPenjamin();
+//    _getPendapatan();
+//    _getAllPasien();
     _getKunjunganPerTanggalAndInstalasi();
     _controller = new TabController(length: 2, vsync: this);
   }
+
   List<TargetFocus> targets = List();
   GlobalKey keyButton = GlobalKey();
   GlobalKey keyButton2 = GlobalKey();
@@ -57,7 +64,6 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
   GlobalKey keyButton4 = GlobalKey();
   GlobalKey keyButton5 = GlobalKey();
 
-  var listPoliKlinik = new List<MPoliKlinik>();
   var dataPenjamin = new List<MPenjamin>();
 
   String unitId;
@@ -74,21 +80,56 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
   Money PiutangUnitTotal;
   Money PiutangPenjaminTotal;
 
-  DateTime sampaiDate =
-      DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime sampaiDate = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month + 1, 0);
   DateTime dariDate = DateTime(DateTime.now().year, DateTime.now().month);
 
   DateTime datePendapatan = DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime toDatePendapatan =DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-  DateTime datePendapatanUnit =DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime toDatePendapatanUnit =DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-  DateTime datePendapatanPenjamin =DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime toDatePendapatanPenjamin =DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime toDatePendapatan = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month + 1, 0);
+  DateTime datePendapatanUnit = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month);
+  DateTime toDatePendapatanUnit = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month + 1, 0);
+  DateTime datePendapatanPenjamin = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month);
+  DateTime toDatePendapatanPenjamin = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month + 1, 0);
 
-  DateTime datePiutangUnit =DateTime(DateTime.now().year, DateTime.now().month);
+  DateTime datePiutangUnit = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month);
   DateTime toDatePiutangUnit = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-  DateTime datePiutangPenjamin =DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime toDatePiutangPenjamin =DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime datePiutangPenjamin = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month);
+  DateTime toDatePiutangPenjamin = DateTime(DateTime
+      .now()
+      .year, DateTime
+      .now()
+      .month + 1, 0);
 
   var dataRawatDarurat = new List<RawatDarurat>();
   var dataRawatInap = new List<RawatInap>();
@@ -96,6 +137,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
   var dataFarmasi = new List<Farmasi>();
   var dataPenunjang = new List<Penunjang>();
   var dataInstalasiKamarJenazah = new List<InstalasiKamarJenazah>();
+
   @override
   void dispose() {
     super.dispose();
@@ -112,35 +154,35 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
 
   void checkIntroducing() async {
     String isIntro = await LocalStorage.sharedInstance.readValue('intro');
-    if(isIntro == null){
+    if (isIntro == null) {
       initTargets();
       WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     }
   }
 
   void showTutorial() {
-    TutorialCoachMark(context,
-        targets: targets,
+    TutorialCoachMark(context, targets: targets,
         colorShadow: Colors.red,
         paddingFocus: 10,
-        opacityShadow: 0.8, finish: () {
+        opacityShadow: 0.8,
+        finish: () {
 //          print("finish");
           String setting_finger = '{"intro":"true"}';
-          LocalStorage.sharedInstance
-              .writeValue(key: 'intro', value: setting_finger);
-        }, clickTarget: (target) {
+          LocalStorage.sharedInstance.writeValue(
+              key: 'intro', value: setting_finger);
+        },
+        clickTarget: (target) {
           print(target.identify);
-          if(target.identify == 'Target 2'){
-            _selectMonthPendapatan(context);
-          }
-        }, clickSkip: () {
+        },
+        clickSkip: () {
 //          print("skip");
           String setting_finger = '{"intro":"true"}';
-          LocalStorage.sharedInstance
-              .writeValue(key: 'intro', value: setting_finger);
+          LocalStorage.sharedInstance.writeValue(
+              key: 'intro', value: setting_finger);
         })
       ..show();
   }
+
   void _afterLayout(_) {
     Future.delayed(Duration(milliseconds: 100), () {
       showTutorial();
@@ -161,8 +203,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                 children: <Widget>[
                   Text(
                     "Filter Pendapatan",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                    style: TextStyle(fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontSize: 20.0),
                   ),
@@ -193,19 +234,16 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
                       "Pilih rentang tanggal",
-                      style: TextStyle(
-                          color: Colors.white,
+                      style: TextStyle(color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 20.0),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Image(
-                        width: 180,
-                        fit: BoxFit.fill,
-                        image: new AssetImage('assets/tutorial/tips1.gif'))
-                  ),
+                      padding: const EdgeInsets.all(10.0),
+                      child: Image(width: 180,
+                          fit: BoxFit.fill,
+                          image: new AssetImage('assets/tutorial/tips1.gif'))),
                 ],
               ),
             ))
@@ -214,99 +252,35 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
     ));
   }
 
-  _getAllPasien() {
-    Api.getAllPasien().then((value) {
-      var result = json.decode(value.body);
-      setState(() {
-        totalPasien = result['data']['total'];
-        PasienLakiLaki = result['data']['laki_laki'];
-        PasienPerempuan = result['data']['perempuan'];
-        HariIni = result['data']['today'];
-      });
-    });
-  }
-
-  void _getPoliKlinik() async {
-    setState(() {
-      _saving = true;
-    });
-    Api.getAllUnit().then((response) {
-      var result = json.decode(response.body);
-      if (result['status'] == 200) {
-        setState(() {
-          _saving = false;
-          Iterable list = json.decode(response.body)['data'];
-          listPoliKlinik =
-              list.map((model) => MPoliKlinik.fromMap(model)).toList();
-        });
-      } else {
-        setState(() {
-          _saving = false;
-        });
-      }
-    });
-  }
-
-  void _getPenjamin() async {
-    Api.getAllPenjamin().then((response) {
-      var result = json.decode(response.body);
-      setState(() {
-        Iterable list = json.decode(response.body)['data'];
-        dataPenjamin = list.map((model) => MPenjamin.fromMap(model)).toList();
-//        print(dataPenjamin[2].penjaminNama);
-      });
-    });
-  }
-
-  _getPendapatan() {
-    Api.getPendapatanTunai(
-            DateFormat('yyyy-MM-dd').format(datePendapatan).toString(),
-            DateFormat('yyyy-MM-dd').format(toDatePendapatan).toString())
-        .then((value) {
-      var result = json.decode(value.body);
-      var total = Money.fromInt(int.parse(result['data'].toString()), ind);
-      setState(() {
-        PendapatanTotal = total;
-      });
-    });
-  }
-
-  _getPendapatanUnit() {
-    Api.getPendapatanTunaiUnit(
-            DateFormat('yyyy-MM-dd').format(datePendapatanUnit).toString(),
-            DateFormat('yyyy-MM-dd').format(toDatePendapatanUnit).toString(),
-            unitId)
-        .then((value) {
-      var result = json.decode(value.body);
-      var total = Money.fromInt(int.parse(result['data'].toString()), ind);
-      setState(() {
-        PendapatanUnitTotal = total;
-      });
-    });
-  }
-
-  _getPendapatanPenjamin() {
-    Api.getPendapatanTunaiPenjamin(
-            DateFormat('yyyy-MM-dd').format(datePendapatanPenjamin).toString(),
-            DateFormat('yyyy-MM-dd')
-                .format(toDatePendapatanPenjamin)
-                .toString(),
-            penjaminId)
-        .then((value) {
-      var result = json.decode(value.body);
-      var total = Money.fromInt(int.parse(result['data'].toString()), ind);
-      setState(() {
-        PendapatanPenjaminTotal = total;
-      });
-    });
-  }
+//  _getPendapatanUnit() {
+//    Api.getPendapatanTunaiUnit(
+//            DateFormat('yyyy-MM-dd').format(datePendapatanUnit).toString(), DateFormat('yyyy-MM-dd').format(toDatePendapatanUnit).toString(), unitId)
+//        .then((value) {
+//      var result = json.decode(value.body);
+//      var total = Money.fromInt(int.parse(result['data'].toString()), ind);
+//      setState(() {
+//        PendapatanUnitTotal = total;
+//      });
+//    });
+//  }
+//
+//  _getPendapatanPenjamin() {
+//    Api.getPendapatanTunaiPenjamin(DateFormat('yyyy-MM-dd').format(datePendapatanPenjamin).toString(),
+//            DateFormat('yyyy-MM-dd').format(toDatePendapatanPenjamin).toString(), penjaminId)
+//        .then((value) {
+//      var result = json.decode(value.body);
+//      var total = Money.fromInt(int.parse(result['data'].toString()), ind);
+//      setState(() {
+//        PendapatanPenjaminTotal = total;
+//      });
+//    });
+//  }
 
   _getPiutangUnit() {
     Api.getPiutangUnit(
-            DateFormat('yyyy-MM-dd').format(datePiutangUnit).toString(),
-            DateFormat('yyyy-MM-dd').format(toDatePiutangUnit).toString(),
-            piutangUnitId,
-            piutangStatusUnitId.toString())
+        DateFormat('yyyy-MM-dd').format(datePiutangUnit).toString(),
+        DateFormat('yyyy-MM-dd').format(toDatePiutangUnit).toString(),
+        piutangUnitId, piutangStatusUnitId.toString())
         .then((value) {
       var result = json.decode(value.body);
       var total = Money.fromInt(int.parse(result['data'].toString()), ind);
@@ -318,10 +292,9 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
 
   _getPiutangPenjamin() {
     Api.getPiutangPenjamin(
-            DateFormat('yyyy-MM-dd').format(datePiutangPenjamin).toString(),
-            DateFormat('yyyy-MM-dd').format(toDatePiutangPenjamin).toString(),
-            piutangPenjaminId,
-            piutangStatusPenjaminId)
+        DateFormat('yyyy-MM-dd').format(datePiutangPenjamin).toString(),
+        DateFormat('yyyy-MM-dd').format(toDatePiutangPenjamin).toString(),
+        piutangPenjaminId, piutangStatusPenjaminId)
         .then((value) {
       var result = json.decode(value.body);
       var total = Money.fromInt(int.parse(result['data'].toString()), ind);
@@ -333,6 +306,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
 
   @override
   Widget build(BuildContext context) {
+    DataProvider themeNotifier = Provider.of<DataProvider>(context);
 //    print(PendapatanTotal.toString().isNotEmpty);
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
@@ -345,1234 +319,581 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
         inAsyncCall: _saving,
         child: SingleChildScrollView(
             child: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: width,
-                child: Card(
-                  key: keyButton,
-                  elevation: 5,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: <Widget>[
+                  WidgetPendapatan(width: width,),
+                  WidgetTotalPasien(width: width, themeNotifier: themeNotifier),
+                  Row(
                     children: <Widget>[
-                      Container(
-                        height: 40,
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Center(
-                              child: Text(
-                                'Total Pendapatan Tunai',
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.cyan[800]),
-                              ),
-                            ),
-                            Icon(
-                              Icons.monetization_on,
-                              color: Colors.grey,
-                            )
-                          ],
-                        ),
-                      ),
-                      Divider(),
-                      Container(
-//                        height: 80,
-                        width: width,
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: ListTile(
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(top: 0, right: 5),
-                                child: DateTime(DateTime.now().year,
-                                                DateTime.now().month) !=
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(datePendapatan) &&
-                                        DateFormat('yyyy-MM-dd')
-                                                .format(toDatePendapatan) !=
-                                            DateFormat('yyyy-MM-dd').format(
-                                                DateTime(
-                                                    DateTime.now().year,
-                                                    DateTime.now().month + 1,
-                                                    0))
-                                    ? Row(
+                      Expanded(
+                        child: Container(
+                          child: Card(
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 40,
+                                      padding: EdgeInsets.only(left: 10, right: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
                                         children: <Widget>[
-                                          Text(
-                                            DateFormat('dd/MMM/yyyy')
-                                                .format(datePendapatan)
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey[500]),
+                                          Center(
+                                            child: Text(
+                                              'Piutang',
+                                              style: TextStyle(fontSize: 15,
+                                                  color: Colors.cyan[800]),
+                                            ),
                                           ),
-                                          Container(
-                                            width: 5,
+                                          Icon(
+                                            Icons.sync,
+                                            color: Colors.grey,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(),
+                                    Container(
+                                      height: 80,
+                                      child: new TabBar(
+                                        isScrollable: true,
+                                        labelColor: Colors.cyan,
+                                        unselectedLabelColor: Colors.grey,
+                                        indicatorPadding: EdgeInsets.all(10),
+                                        indicatorColor: Colors.cyan,
+                                        indicator: new BubbleTabIndicator(
+                                          indicatorHeight: 30.0,
+                                          indicatorColor: Colors.grey[200],
+                                          tabBarIndicatorSize: TabBarIndicatorSize
+                                              .tab,
+                                        ),
+                                        controller: _controller,
+                                        tabs: [
+                                          new Tab(
+                                            text: 'Unit',
                                           ),
-                                          Text("s/d",
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.cyan[800])),
-                                          Container(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            DateFormat('dd/MMM/yyyy')
-                                                .format(toDatePendapatan)
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey[500]),
+                                          new Tab(
+                                            text: 'Penjamin',
                                           ),
                                         ],
-                                      )
-                                    : Text(
-                                        'Bulan Ini',
-                                        style: TextStyle(
-                                            fontSize: 12, color: Colors.grey),
                                       ),
-                              ),
-                              Text(
-                                PendapatanTotal.toString() == 'null'
-                                    ? 'wait...'
-                                    : PendapatanTotal.toString(),
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w900),
-                              ),
-                            ],
-                          ),
-                          trailing: InkWell(
-                            onTap: () => _selectMonthPendapatan(context),
-                            child: Container(
-                              margin: EdgeInsets.only(top: 8, right: 5),
-                              child: Column(
-                                children: <Widget>[
-                                  Icon(Icons.date_range,
-                                      key:keyButton2,
-                                      size: 30, color: Colors.amber),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Card(
-                          elevation: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 5),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 40,
-                                  padding: EdgeInsets.only(left: 10, right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Center(
-                                        child: Text(
-                                          'Pendapatan Tunai',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.cyan[800]),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.monetization_on,
-                                        color: Colors.grey,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Divider(),
-                                Container(
-                                  height: 80,
-                                  child: new TabBar(
-                                    isScrollable: true,
-                                    labelColor: Colors.cyan,
-                                    unselectedLabelColor: Colors.grey,
-                                    indicatorPadding: EdgeInsets.all(10),
-                                    indicatorColor: Colors.cyan,
-                                    indicator: new BubbleTabIndicator(
-                                      indicatorHeight: 30.0,
-                                      indicatorColor: Colors.grey[200],
-                                      tabBarIndicatorSize:
-                                          TabBarIndicatorSize.tab,
                                     ),
-                                    controller: _controller,
-                                    tabs: [
-                                      new Tab(
-                                        text: 'Unit',
-                                      ),
-                                      new Tab(
-                                        text: 'Penjamin',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: 150,
-                                  child: new TabBarView(
-                                    controller: _controller,
-                                    children: <Widget>[
-                                      ListTile(
-                                        title: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                    Container(
+                                      height: 180,
+                                      child: new TabBarView(
+                                        controller: _controller,
+                                        children: <Widget>[
+                                          ListTile(
+                                            title: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
                                               children: <Widget>[
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      top: 10, right: 5),
-                                                  child: DateTime(
-                                                                  DateTime.now()
-                                                                      .year,
-                                                                  DateTime
-                                                                          .now()
-                                                                      .month) !=
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      datePendapatanUnit) &&
-                                                          DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      toDatePendapatanUnit) !=
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(DateTime(
-                                                                      DateTime.now()
-                                                                          .year,
-                                                                      DateTime.now()
-                                                                              .month +
-                                                                          1,
-                                                                      0))
-                                                      ? Row(
-                                                          children: <Widget>[
-                                                            Text(
-                                                              DateFormat(
-                                                                      'dd/MMM/yyyy')
-                                                                  .format(
-                                                                      datePendapatanUnit)
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      500]),
-                                                            ),
-                                                            Container(
-                                                              width: 5,
-                                                            ),
-                                                            Text("s/d",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                            .cyan[
-                                                                        800])),
-                                                            Container(
-                                                              width: 5,
-                                                            ),
-                                                            Text(
-                                                              DateFormat(
-                                                                      'dd/MMM/yyyy')
-                                                                  .format(
-                                                                      toDatePendapatanUnit)
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      500]),
-                                                            ),
-                                                          ],
-                                                        )
-                                                      : Text(
-                                                          'Bulan Ini',
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.grey),
-                                                        ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () =>
-                                                      _selectMonthPendapatanUnit(
-                                                          context),
-                                                  child: Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 8, right: 5),
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        Icon(Icons.date_range,
-                                                            size: 30,
-                                                            color:
-                                                                Colors.amber),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            listPoliKlinik.isNotEmpty
-                                                ? DropdownButtonFormField<
-                                                    String>(
-                                                    decoration: InputDecoration
-                                                        .collapsed(
-                                                            hintText: ''),
-                                                    hint: new Text(
-                                                      "Pilih Unit",
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 12),
-                                                    ),
-                                                    value: unitId,
-                                                    onChanged:
-                                                        (String newValue) {
-                                                      _onchangeUnit(newValue);
-                                                    },
-                                                    items: listPoliKlinik.map(
-                                                        (MPoliKlinik item) {
-                                                      return new DropdownMenuItem<
-                                                          String>(
-                                                        value: item.unitId
-                                                            .toString(),
-                                                        child: new Text(
-                                                          item.unitNama
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 13),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                  )
-                                                : Container(),
-                                            Text(
-                                              PendapatanUnitTotal.toString() ==
-                                                      'null'
-                                                  ? 'Rp 0'
-                                                  : PendapatanUnitTotal
-                                                      .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.w900),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      ListTile(
-                                        title: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment
                                                       .spaceBetween,
-                                              children: <Widget>[
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      top: 10, right: 5),
-                                                  child: DateTime(
-                                                                  DateTime.now()
-                                                                      .year,
-                                                                  DateTime
-                                                                          .now()
-                                                                      .month) !=
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      datePendapatanPenjamin) &&
+                                                  children: <Widget>[
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 0, right: 5),
+                                                      child: DateTime(DateTime
+                                                          .now()
+                                                          .year, DateTime
+                                                          .now()
+                                                          .month) !=
                                                           DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      toDatePendapatanPenjamin) !=
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(DateTime(
-                                                                      DateTime.now()
-                                                                          .year,
-                                                                      DateTime.now()
-                                                                              .month +
-                                                                          1,
-                                                                      0))
-                                                      ? Row(
-                                                          children: <Widget>[
-                                                            Text(
-                                                              DateFormat(
-                                                                      'dd/MMM/yyyy')
-                                                                  .format(
-                                                                      datePendapatanPenjamin)
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      500]),
-                                                            ),
-                                                            Container(
-                                                              width: 5,
-                                                            ),
-                                                            Text("s/d",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                            .cyan[
-                                                                        800])),
-                                                            Container(
-                                                              width: 5,
-                                                            ),
-                                                            Text(
-                                                              DateFormat(
-                                                                      'dd/MMM/yyyy')
-                                                                  .format(
-                                                                      toDatePendapatanPenjamin)
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      500]),
-                                                            ),
-                                                          ],
-                                                        )
-                                                      : Text(
-                                                          'Bulan Ini',
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.grey),
-                                                        ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () =>
-                                                      _selectMonthPendapatanPenjamin(
-                                                          context),
-                                                  child: Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 8, right: 5),
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        Icon(Icons.date_range,
-                                                            size: 30,
-                                                            color:
-                                                                Colors.amber),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            dataPenjamin.isNotEmpty
-                                                ? DropdownButtonFormField<
-                                                    String>(
-                                                    decoration: InputDecoration
-                                                        .collapsed(
-                                                            hintText: ''),
-                                                    hint: new Text(
-                                                      "Pilih Pejamin",
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 12),
-                                                    ),
-                                                    value: penjaminId,
-                                                    onChanged:
-                                                        (String newValue) {
-                                                      _onchangePenjamin(
-                                                          newValue);
-                                                    },
-                                                    items: dataPenjamin
-                                                        .map((MPenjamin item) {
-                                                      return new DropdownMenuItem<
-                                                          String>(
-                                                        value: item.penjaminId
-                                                            .toString(),
-                                                        child: new Text(
-                                                          item.penjaminNama
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 13),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                  )
-                                                : Container(),
-                                            Text(
-                                              PendapatanPenjaminTotal
-                                                          .toString() ==
-                                                      'null'
-                                                  ? 'Rp 0'
-                                                  : PendapatanPenjaminTotal
-                                                      .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.w900),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                    width: width / 1.4,
-                    child: Card(
-                        elevation: 5,
-                        child: ListTile(
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Total Pasien',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.orange),
-                              ),
-                              Text(
-                                totalPasien == null ? '' : totalPasien,
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w900),
-                              )
-                            ],
-                          ),
-                          trailing: Icon(FontAwesomeIcons.users,
-                              color: Colors.orange),
-                        )),
-                  ),
-                  Expanded(
-                    child: Card(
-                        elevation: 5,
-                        child: ListTile(
-                          title: Column(
-                            children: <Widget>[
-                              Text(
-                                'Hari ini',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.red),
-                              ),
-                              Text(
-                                HariIni == null ? '' : HariIni,
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w900),
-                              )
-                            ],
-                          ),
-                        )),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Card(
-                        elevation: 5,
-                        child: ListTile(
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Laki-laki',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.blue),
-                              ),
-                              Text(
-                                PasienLakiLaki == null ? '' : PasienLakiLaki,
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w900),
-                              )
-                            ],
-                          ),
-                          trailing: Icon(
-                            FontAwesomeIcons.male,
-                            color: Colors.blue,
-                          ),
-                        )),
-                  ),
-                  Expanded(
-                    child: Card(
-                        elevation: 5,
-                        child: ListTile(
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Perempuan',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.pink),
-                              ),
-                              Text(
-                                PasienPerempuan == null ? '' : PasienPerempuan,
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w900),
-                              )
-                            ],
-                          ),
-                          trailing: Icon(
-                            FontAwesomeIcons.female,
-                            color: Colors.pink,
-                          ),
-                        )),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Card(
-                          elevation: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 5),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 40,
-                                  padding: EdgeInsets.only(left: 10, right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Center(
-                                        child: Text(
-                                          'Piutang',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.cyan[800]),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.sync,
-                                        color: Colors.grey,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Divider(),
-                                Container(
-                                  height: 80,
-                                  child: new TabBar(
-                                    isScrollable: true,
-                                    labelColor: Colors.cyan,
-                                    unselectedLabelColor: Colors.grey,
-                                    indicatorPadding: EdgeInsets.all(10),
-                                    indicatorColor: Colors.cyan,
-                                    indicator: new BubbleTabIndicator(
-                                      indicatorHeight: 30.0,
-                                      indicatorColor: Colors.grey[200],
-                                      tabBarIndicatorSize:
-                                          TabBarIndicatorSize.tab,
-                                    ),
-                                    controller: _controller,
-                                    tabs: [
-                                      new Tab(
-                                        text: 'Unit',
-                                      ),
-                                      new Tab(
-                                        text: 'Penjamin',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: 180,
-                                  child: new TabBarView(
-                                    controller: _controller,
-                                    children: <Widget>[
-                                      ListTile(
-                                        title: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      top: 0, right: 5),
-                                                  child: DateTime(
-                                                                  DateTime.now()
-                                                                      .year,
-                                                                  DateTime
-                                                                          .now()
-                                                                      .month) !=
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      datePendapatanPenjamin) &&
+                                                              'yyyy-MM-dd')
+                                                              .format(
+                                                              datePendapatanPenjamin) &&
                                                           DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      toDatePendapatanPenjamin) !=
+                                                              'yyyy-MM-dd')
+                                                              .format(
+                                                              toDatePendapatanPenjamin) !=
                                                               DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(DateTime(
-                                                                      DateTime.now()
+                                                                  'yyyy-MM-dd')
+                                                                  .format(
+                                                                  DateTime(
+                                                                      DateTime
+                                                                          .now()
                                                                           .year,
-                                                                      DateTime.now()
-                                                                              .month +
-                                                                          1,
-                                                                      0))
-                                                      ? Row(
+                                                                      DateTime
+                                                                          .now()
+                                                                          .month +
+                                                                          1, 0))
+                                                          ? Row(
+                                                        children: <Widget>[
+                                                          Text(
+                                                            DateFormat(
+                                                                'dd/MMM/yyyy')
+                                                                .format(
+                                                                datePiutangUnit)
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .grey[500]),
+                                                          ),
+                                                          Container(
+                                                            width: 5,
+                                                          ),
+                                                          Text("s/d",
+                                                              style: TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .cyan[800])),
+                                                          Container(
+                                                            width: 5,
+                                                          ),
+                                                          Text(
+                                                            DateFormat(
+                                                                'dd/MMM/yyyy')
+                                                                .format(
+                                                                toDatePiutangUnit)
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .grey[500]),
+                                                          ),
+                                                        ],
+                                                      )
+                                                          : Text(
+                                                        'Bulan Ini',
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors.grey),
+                                                      ),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () =>
+                                                          _selectMonthPiutangUnit(
+                                                              context),
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(
+                                                            top: 8, right: 5),
+                                                        child: Column(
                                                           children: <Widget>[
-                                                            Text(
-                                                              DateFormat(
-                                                                      'dd/MMM/yyyy')
-                                                                  .format(
-                                                                      datePiutangUnit)
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      500]),
-                                                            ),
-                                                            Container(
-                                                              width: 5,
-                                                            ),
-                                                            Text("s/d",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                            .cyan[
-                                                                        800])),
-                                                            Container(
-                                                              width: 5,
-                                                            ),
-                                                            Text(
-                                                              DateFormat(
-                                                                      'dd/MMM/yyyy')
-                                                                  .format(
-                                                                      toDatePiutangUnit)
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      500]),
-                                                            ),
+                                                            Icon(Icons
+                                                                .date_range,
+                                                                size: 30,
+                                                                color: Colors
+                                                                    .amber),
                                                           ],
-                                                        )
-                                                      : Text(
-                                                          'Bulan Ini',
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.grey),
                                                         ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () =>
-                                                      _selectMonthPiutangUnit(
-                                                          context),
-                                                  child: Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 8, right: 5),
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        Icon(Icons.date_range,
-                                                            size: 30,
-                                                            color:
-                                                                Colors.amber),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                            listPoliKlinik.isNotEmpty
-                                                ? DropdownButtonFormField<
+                                                themeNotifier.listPoliKlinik_
+                                                    .isNotEmpty
+                                                    ? DropdownButtonFormField<
                                                     String>(
-                                                    decoration: InputDecoration
-                                                        .collapsed(
-                                                            hintText: ''),
-                                                    hint: new Text(
-                                                      "Pilih Unit",
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 12),
-                                                    ),
-                                                    value: unitId,
-                                                    onChanged:
-                                                        (String newValue) {
-                                                      _onchangePiutangUnit(
-                                                          newValue);
-                                                    },
-                                                    items: listPoliKlinik.map(
-                                                        (MPoliKlinik item) {
-                                                      return new DropdownMenuItem<
-                                                          String>(
-                                                        value: item.unitId
+                                                  decoration: InputDecoration
+                                                      .collapsed(hintText: ''),
+                                                  hint: new Text(
+                                                    "Pilih Unit",
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 12),
+                                                  ),
+                                                  value: unitId,
+                                                  onChanged: (String newValue) {
+                                                    _onchangePiutangUnit(
+                                                        newValue);
+                                                  },
+                                                  items: themeNotifier
+                                                      .listPoliKlinik_.map((
+                                                      MPoliKlinik item) {
+                                                    return new DropdownMenuItem<
+                                                        String>(
+                                                      value: item.unitId
+                                                          .toString(),
+                                                      child: new Text(
+                                                        item.unitNama
                                                             .toString(),
-                                                        child: new Text(
-                                                          item.unitNama
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 12),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                  )
-                                                : Container(),
-                                            DropdownButtonFormField<String>(
-                                              decoration:
-                                                  InputDecoration.collapsed(
-                                                      hintText: ''),
-                                              hint: new Text(
-                                                "Pilih Status",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 12),
-                                              ),
-                                              value: piutangStatusUnitId,
-                                              items: [
-                                                "TERBUKA",
-                                                "KONFIRMASI",
-                                                "KIRIM",
-                                                "LUNAS",
-                                                "TAK TERTAGIH"
-                                              ]
-                                                  .map((label) =>
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                )
+                                                    : Container(),
+                                                DropdownButtonFormField<String>(
+                                                  decoration: InputDecoration
+                                                      .collapsed(hintText: ''),
+                                                  hint: new Text(
+                                                    "Pilih Status",
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 12),
+                                                  ),
+                                                  value: piutangStatusUnitId,
+                                                  items: [
+                                                    "TERBUKA",
+                                                    "KONFIRMASI",
+                                                    "KIRIM",
+                                                    "LUNAS",
+                                                    "TAK TERTAGIH"
+                                                  ]
+                                                      .map((label) =>
                                                       DropdownMenuItem(
                                                         child: Text(label,
                                                             style: TextStyle(
                                                                 fontSize: 12)),
                                                         value: label,
                                                       ))
-                                                  .toList(),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  piutangStatusUnitId = value;
-                                                });
-                                                _getPiutangUnit();
-                                              },
-                                            ),
-                                            Text(
-                                              PiutangUnitTotal.toString() ==
+                                                      .toList(),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      piutangStatusUnitId = value;
+                                                    });
+                                                    _getPiutangUnit();
+                                                  },
+                                                ),
+                                                Text(
+                                                  PiutangUnitTotal.toString() ==
                                                       'null'
-                                                  ? 'Rp 0'
-                                                  : PiutangUnitTotal.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.w900),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      ListTile(
-                                        title: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      top: 0, right: 5),
-                                                  child: DateTime(
-                                                                  DateTime.now()
-                                                                      .year,
-                                                                  DateTime
-                                                                          .now()
-                                                                      .month) !=
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      datePendapatanPenjamin) &&
-                                                          DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      toDatePendapatanPenjamin) !=
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(DateTime(
-                                                                      DateTime.now()
-                                                                          .year,
-                                                                      DateTime.now()
-                                                                              .month +
-                                                                          1,
-                                                                      0))
-                                                      ? Row(
-                                                          children: <Widget>[
-                                                            Text(
-                                                              DateFormat(
-                                                                      'dd/MMM/yyyy')
-                                                                  .format(
-                                                                      datePendapatanPenjamin)
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      500]),
-                                                            ),
-                                                            Container(
-                                                              width: 5,
-                                                            ),
-                                                            Text("s/d",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                            .cyan[
-                                                                        800])),
-                                                            Container(
-                                                              width: 5,
-                                                            ),
-                                                            Text(
-                                                              DateFormat(
-                                                                      'dd/MMM/yyyy')
-                                                                  .format(
-                                                                      toDatePendapatanPenjamin)
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      500]),
-                                                            ),
-                                                          ],
-                                                        )
-                                                      : Text(
-                                                          'Bulan Ini',
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.grey),
-                                                        ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () =>
-                                                      _selectMonthPiutangPenjamin(
-                                                          context),
-                                                  child: Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 8, right: 5),
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        Icon(Icons.date_range,
-                                                            size: 30,
-                                                            color:
-                                                                Colors.amber),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
+                                                      ? 'Rp 0'
+                                                      : PiutangUnitTotal
+                                                      .toString(),
+                                                  style: TextStyle(fontSize: 22,
+                                                      fontWeight: FontWeight
+                                                          .w900),
+                                                )
                                               ],
                                             ),
-                                            dataPenjamin.isNotEmpty
-                                                ? DropdownButtonFormField<
-                                                    String>(
-                                                    decoration: InputDecoration
-                                                        .collapsed(
-                                                            hintText: ''),
-                                                    hint: new Text(
-                                                      "Pilih Pejamin",
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 12),
+                                          ),
+                                          ListTile(
+                                            title: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 0, right: 5),
+                                                      child: DateTime(DateTime
+                                                          .now()
+                                                          .year, DateTime
+                                                          .now()
+                                                          .month) !=
+                                                          DateFormat(
+                                                              'yyyy-MM-dd')
+                                                              .format(
+                                                              datePendapatanPenjamin) &&
+                                                          DateFormat(
+                                                              'yyyy-MM-dd')
+                                                              .format(
+                                                              toDatePendapatanPenjamin) !=
+                                                              DateFormat(
+                                                                  'yyyy-MM-dd')
+                                                                  .format(
+                                                                  DateTime(
+                                                                      DateTime
+                                                                          .now()
+                                                                          .year,
+                                                                      DateTime
+                                                                          .now()
+                                                                          .month +
+                                                                          1, 0))
+                                                          ? Row(
+                                                        children: <Widget>[
+                                                          Text(
+                                                            DateFormat(
+                                                                'dd/MMM/yyyy')
+                                                                .format(
+                                                                datePendapatanPenjamin)
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .grey[500]),
+                                                          ),
+                                                          Container(
+                                                            width: 5,
+                                                          ),
+                                                          Text("s/d",
+                                                              style: TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .cyan[800])),
+                                                          Container(
+                                                            width: 5,
+                                                          ),
+                                                          Text(
+                                                            DateFormat(
+                                                                'dd/MMM/yyyy')
+                                                                .format(
+                                                                toDatePendapatanPenjamin)
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .grey[500]),
+                                                          ),
+                                                        ],
+                                                      )
+                                                          : Text(
+                                                        'Bulan Ini',
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors.grey),
+                                                      ),
                                                     ),
-                                                    value: penjaminId,
-                                                    onChanged:
-                                                        (String newValue) {
-                                                      _onchangePiutangPenjamin(
-                                                          newValue);
-                                                    },
-                                                    items: dataPenjamin
-                                                        .map((MPenjamin item) {
-                                                      return new DropdownMenuItem<
-                                                          String>(
-                                                        value: item.penjaminId
-                                                            .toString(),
-                                                        child: new Text(
-                                                          item.penjaminNama
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 12),
+                                                    InkWell(
+                                                      onTap: () =>
+                                                          _selectMonthPiutangPenjamin(
+                                                              context),
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(
+                                                            top: 8, right: 5),
+                                                        child: Column(
+                                                          children: <Widget>[
+                                                            Icon(Icons
+                                                                .date_range,
+                                                                size: 30,
+                                                                color: Colors
+                                                                    .amber),
+                                                          ],
                                                         ),
-                                                      );
-                                                    }).toList(),
-                                                  )
-                                                : Container(),
-                                            DropdownButtonFormField<String>(
-                                              decoration:
-                                                  InputDecoration.collapsed(
-                                                      hintText: ''),
-                                              hint: new Text(
-                                                "Pilih Status",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 12),
-                                              ),
-                                              value: piutangStatusPenjaminId,
-                                              items: [
-                                                "TERBUKA",
-                                                "KONFIRMASI",
-                                                "KIRIM",
-                                                "LUNAS",
-                                                "TAK TERTAGIH"
-                                              ]
-                                                  .map((label) =>
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                dataPenjamin.isNotEmpty
+                                                    ? DropdownButtonFormField<
+                                                    String>(
+                                                  decoration: InputDecoration
+                                                      .collapsed(hintText: ''),
+                                                  hint: new Text(
+                                                    "Pilih Pejamin",
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 12),
+                                                  ),
+                                                  value: penjaminId,
+                                                  onChanged: (String newValue) {
+                                                    _onchangePiutangPenjamin(
+                                                        newValue);
+                                                  },
+                                                  items: dataPenjamin.map((
+                                                      MPenjamin item) {
+                                                    return new DropdownMenuItem<
+                                                        String>(
+                                                      value: item.penjaminId
+                                                          .toString(),
+                                                      child: new Text(
+                                                        item.penjaminNama
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                )
+                                                    : Container(),
+                                                DropdownButtonFormField<String>(
+                                                  decoration: InputDecoration
+                                                      .collapsed(hintText: ''),
+                                                  hint: new Text(
+                                                    "Pilih Status",
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 12),
+                                                  ),
+                                                  value: piutangStatusPenjaminId,
+                                                  items: [
+                                                    "TERBUKA",
+                                                    "KONFIRMASI",
+                                                    "KIRIM",
+                                                    "LUNAS",
+                                                    "TAK TERTAGIH"
+                                                  ]
+                                                      .map((label) =>
                                                       DropdownMenuItem(
                                                         child: Text(label,
                                                             style: TextStyle(
                                                                 fontSize: 13)),
                                                         value: label,
                                                       ))
-                                                  .toList(),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  piutangStatusPenjaminId =
-                                                      value;
-                                                });
-                                                _getPiutangPenjamin();
-                                              },
-                                            ),
-                                            Text(
-                                              PiutangPenjaminTotal.toString() ==
-                                                      'null'
-                                                  ? 'Rp 0'
-                                                  : PiutangPenjaminTotal
+                                                      .toList(),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      piutangStatusPenjaminId =
+                                                          value;
+                                                    });
+                                                    _getPiutangPenjamin();
+                                                  },
+                                                ),
+                                                Text(
+                                                  PiutangPenjaminTotal
+                                                      .toString() == 'null'
+                                                      ? 'Rp 0'
+                                                      : PiutangPenjaminTotal
                                                       .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.w900),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                child: PieChartSample2(),
-              ),
-              Container(
-                  child: Card(
-                      elevation: 5,
-                      child: Column(
-                        children: <Widget>[
-                          const SizedBox(
-                            height: 18,
-                          ),
-                          Text(
-                            'Grafik Kunjungan Per Instalasi',
-                            style: TextStyle(fontSize: 15),
-                            textAlign: TextAlign.left,
-                          ),
-                          const SizedBox(
-                            height: 18,
-                          ),
-                          Divider(),
-                          Container(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                Container(
-                                  child: Column(
-                                    children: <Widget>[
-                                      IconButton(
-                                          icon: Icon(Icons.date_range,
-                                              size: 30, color: Colors.amber),
-                                          onPressed: () async {
-                                            final List<DateTime> picked =
-                                                await DateRagePicker
-                                                    .showDatePicker(
-                                              context: context,
-                                              initialFirstDate: dariDate,
-                                              initialLastDate: sampaiDate,
-                                              firstDate: DateTime(
-                                                  DateTime.now().year - 50, 5),
-                                              lastDate: DateTime(
-                                                  DateTime.now().year + 50, 9),
-                                            );
-                                            if (picked != null &&
-                                                picked.length == 2) {
-                                              if (picked[0] != picked[1]) {
-                                                setState(() {
-                                                  dariDate = picked[0];
-                                                  sampaiDate = picked[1];
-                                                });
-                                              }else{
-                                                Flushbar(
-                                                  title: "Gagal",
-                                                  message: "Grafik tidak bisa menampilkan jika tanggal sama, silahkan pilih minimal rentang 1 hari",
-                                                  duration: Duration(seconds: 5),
-                                                  backgroundColor: Colors.red,
-                                                  flushbarPosition: FlushbarPosition.TOP,
-                                                  icon: Icon(
-                                                    Icons.error,
-                                                    color: Colors.white,
-                                                  ),
-                                                )..show(context);
-                                              }
-                                            }
-                                          }),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(
-                                            DateFormat('dd/MMM/yyyy')
-                                                .format(dariDate)
-                                                .toString(),
-                                            style: TextStyle(fontSize: 12),
-                                          ),
-                                          Container(
-                                            width: 20,
-                                          ),
-                                          Text(
-                                            DateFormat('dd/MMM/yyyy')
-                                                .format(sampaiDate)
-                                                .toString(),
-                                            style: TextStyle(fontSize: 12),
+                                                  style: TextStyle(fontSize: 22,
+                                                      fontWeight: FontWeight
+                                                          .w900),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          new Container(
-//                            decoration: new BoxDecoration(color: Theme.of(context).primaryColor),
-                            child: new TabBar(
-                              isScrollable: true,
-                              labelColor: Colors.cyan,
-                              unselectedLabelColor: Colors.grey,
-                              indicatorPadding: EdgeInsets.all(10),
-                              indicatorColor: Colors.cyan,
-                              indicator: new BubbleTabIndicator(
-                                indicatorHeight: 30.0,
-                                indicatorColor: Colors.grey[200],
-                                tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    child: PieChartSample2(),
+                  ),
+                  Container(
+                      child: Card(
+                          elevation: 5,
+                          child: Column(
+                            children: <Widget>[
+                              const SizedBox(
+                                height: 18,
                               ),
-                              controller: _controller,
-                              tabs: [
-                                new Tab(
-                                  text: 'Harian',
+                              Text(
+                                'Grafik Kunjungan Per Instalasi',
+                                style: TextStyle(fontSize: 15),
+                                textAlign: TextAlign.left,
+                              ),
+                              const SizedBox(
+                                height: 18,
+                              ),
+                              Divider(),
+                              Container(
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Container(
+                                      child: Column(
+                                        children: <Widget>[
+                                          IconButton(
+                                              icon: Icon(
+                                                  Icons.date_range, size: 30,
+                                                  color: Colors.amber),
+                                              onPressed: () async {
+                                                final List<
+                                                    DateTime> picked = await DateRagePicker
+                                                    .showDatePicker(
+                                                  context: context,
+                                                  initialFirstDate: dariDate,
+                                                  initialLastDate: sampaiDate,
+                                                  firstDate: DateTime(DateTime
+                                                      .now()
+                                                      .year - 50, 5),
+                                                  lastDate: DateTime(DateTime
+                                                      .now()
+                                                      .year + 50, 9),
+                                                );
+                                                if (picked != null &&
+                                                    picked.length == 2) {
+                                                  if (picked[0] != picked[1]) {
+                                                    setState(() {
+                                                      dariDate = picked[0];
+                                                      sampaiDate = picked[1];
+                                                    });
+                                                  } else {
+                                                    Flushbar(
+                                                      title: "Gagal",
+                                                      message: "Grafik tidak bisa menampilkan jika tanggal sama, silahkan pilih minimal rentang 1 hari",
+                                                      duration: Duration(seconds: 5),
+                                                      backgroundColor: Colors.red,
+                                                      flushbarPosition: FlushbarPosition.TOP,
+                                                      icon: Icon(
+                                                        Icons.error,
+                                                        color: Colors.white,
+                                                      ),
+                                                    )..show(context);
+                                                  }
+                                                }
+                                              }),
+                                          Row(
+                                            children: <Widget>[
+                                              Text(
+                                                DateFormat('dd/MMM/yyyy')
+                                                    .format(dariDate)
+                                                    .toString(),
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                              Container(
+                                                width: 20,
+                                              ),
+                                              Text(
+                                                DateFormat('dd/MMM/yyyy')
+                                                    .format(sampaiDate)
+                                                    .toString(),
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                new Tab(
-                                  text: 'Bulanan',
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              new Container(
+//                            decoration: new BoxDecoration(color: Theme.of(context).primaryColor),
+                                child: new TabBar(
+                                  isScrollable: true,
+                                  labelColor: Colors.cyan,
+                                  unselectedLabelColor: Colors.grey,
+                                  indicatorPadding: EdgeInsets.all(10),
+                                  indicatorColor: Colors.cyan,
+                                  indicator: new BubbleTabIndicator(
+                                    indicatorHeight: 30.0,
+                                    indicatorColor: Colors.grey[200],
+                                    tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                                  ),
+                                  controller: _controller,
+                                  tabs: [
+                                    new Tab(
+                                      text: 'Harian',
+                                    ),
+                                    new Tab(
+                                      text: 'Bulanan',
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          new Container(
-                            padding: EdgeInsets.all(10),
-                            height: 300.0,
-                            child: new TabBarView(
-                              controller: _controller,
-                              children: <Widget>[
-                                ahad(context),
-                                bulanan(context),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ))),
-            ],
-          ),
-        )),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              new Container(
+                                padding: EdgeInsets.all(10),
+                                height: 300.0,
+                                child: new TabBarView(
+                                  controller: _controller,
+                                  children: <Widget>[
+                                    ahad(context),
+                                    bulanan(context),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ))),
+                ],
+              ),
+            )),
       ),
     );
-  }
-
-  Future<Null> _selectMonthPendapatan(BuildContext context) async {
-    final List<DateTime> picked = await DateRagePicker.showDatePicker(
-      context: context,
-      initialFirstDate: datePendapatan,
-      initialLastDate: toDatePendapatan,
-      firstDate: DateTime(DateTime.now().year - 50, 5),
-      lastDate: DateTime(DateTime.now().year + 50, 9),
-    );
-    if (picked != null && picked.length == 2) {
-//      print(picked);
-      setState(() {
-        datePendapatan = picked[0];
-        toDatePendapatan = picked[1];
-      });
-      _getPendapatan();
-    }
-  }
-
-  Future<Null> _selectMonthPendapatanUnit(BuildContext context) async {
-    final List<DateTime> picked = await DateRagePicker.showDatePicker(
-      context: context,
-      initialFirstDate: datePendapatanUnit,
-      initialLastDate: toDatePendapatanUnit,
-      firstDate: DateTime(DateTime.now().year - 50, 5),
-      lastDate: DateTime(DateTime.now().year + 50, 9),
-    );
-    if (picked != null && picked.length == 2) {
-//      print(picked);
-      setState(() {
-        datePendapatanUnit = picked[0];
-        toDatePendapatanUnit = picked[1];
-      });
-      _getPendapatanUnit();
-    }
-  }
-
-  Future<Null> _selectMonthPendapatanPenjamin(BuildContext context) async {
-    final List<DateTime> picked = await DateRagePicker.showDatePicker(
-      context: context,
-      initialFirstDate: datePendapatanPenjamin,
-      initialLastDate: toDatePendapatanPenjamin,
-      firstDate: DateTime(DateTime.now().year - 50, 5),
-      lastDate: DateTime(DateTime.now().year + 50, 9),
-    );
-    if (picked != null && picked.length == 2) {
-      setState(() {
-        datePendapatanPenjamin = picked[0];
-        toDatePendapatanPenjamin = picked[1];
-      });
-      _getPendapatanPenjamin();
-    }
   }
 
   Future<Null> _selectMonthPiutangUnit(BuildContext context) async {
@@ -1610,8 +931,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
   }
 
   Future<Null> _dari(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
+    final DateTime picked = await showDatePicker(context: context,
         initialDate: dariDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
@@ -1623,8 +943,7 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
   }
 
   Future<Null> _sampai(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
+    final DateTime picked = await showDatePicker(context: context,
         initialDate: sampaiDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
@@ -1638,8 +957,8 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
 
   void _getKunjunganPerTanggalAndInstalasi() {
     Api.getKunjunganPerTangganAndInstalasi(
-            DateFormat('yyyy-MM-dd').format(dariDate).toString(),
-            DateFormat('yyyy-MM-dd').format(sampaiDate).toString())
+        DateFormat('yyyy-MM-dd').format(dariDate).toString(),
+        DateFormat('yyyy-MM-dd').format(sampaiDate).toString())
         .then((value) {
       var result = json.decode(value.body);
       setState(() {
@@ -1647,11 +966,9 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
         Iterable farmasi = result['data']['FARMASI'];
         dataFarmasi = farmasi.map((model) => Farmasi.fromMap(model)).toList();
         //        Data Instalasi Kamar Jenazah
-        Iterable instalasiKamarJenazah =
-            result['data']['INSTALASI_KAMAR_JENAZAH'];
-        dataInstalasiKamarJenazah = instalasiKamarJenazah
-            .map((model) => InstalasiKamarJenazah.fromMap(model))
-            .toList();
+        Iterable instalasiKamarJenazah = result['data']['INSTALASI_KAMAR_JENAZAH'];
+        dataInstalasiKamarJenazah = instalasiKamarJenazah.map((model) =>
+            InstalasiKamarJenazah.fromMap(model)).toList();
         //        Data penunjang
         Iterable penunjang = result['data']['PENUNJANG'];
         dataPenunjang =
@@ -1702,22 +1019,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataFarmasi.isNotEmpty
                 ? BezierLine(
                     label: "Farmasi",
-                    lineColor: dataFarmasi.isNotEmpty
-                        ? convertToColor(dataFarmasi[0].color)
-                        : Colors.black,
+              lineColor: dataFarmasi.isNotEmpty ? convertToColor(
+                  dataFarmasi[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataFarmasi.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Farmasi",
-                    lineColor: dataFarmasi.isNotEmpty
-                        ? convertToColor(dataFarmasi[0].color)
-                        : Colors.black,
+                lineColor: dataFarmasi.isNotEmpty ? convertToColor(
+                    dataFarmasi[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1726,22 +1040,20 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataInstalasiKamarJenazah.isNotEmpty
                 ? BezierLine(
                     label: "KM Jenazah",
-                    lineColor: dataInstalasiKamarJenazah.isNotEmpty
-                        ? convertToColor(dataInstalasiKamarJenazah[0].color)
-                        : Colors.grey,
+              lineColor: dataInstalasiKamarJenazah.isNotEmpty ? convertToColor(
+                  dataInstalasiKamarJenazah[0].color) : Colors.grey,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataInstalasiKamarJenazah.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "KM Jenazah",
-                    lineColor: dataInstalasiKamarJenazah.isNotEmpty
-                        ? convertToColor(dataInstalasiKamarJenazah[0].color)
-                        : Colors.grey,
+                lineColor: dataInstalasiKamarJenazah.isNotEmpty
+                    ? convertToColor(dataInstalasiKamarJenazah[0].color)
+                    : Colors.grey,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1750,22 +1062,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataRawatInap.isNotEmpty
                 ? BezierLine(
                     label: "Rawat Inap",
-                    lineColor: dataRawatInap.isNotEmpty
-                        ? convertToColor(dataRawatInap[0].color)
-                        : Colors.black,
+              lineColor: dataRawatInap.isNotEmpty ? convertToColor(
+                  dataRawatInap[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataRawatInap.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Rawat Inap",
-                    lineColor: dataRawatInap.isNotEmpty
-                        ? convertToColor(dataRawatInap[0].color)
-                        : Colors.black,
+                lineColor: dataRawatInap.isNotEmpty ? convertToColor(
+                    dataRawatInap[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1774,22 +1083,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataRawatJalan.isNotEmpty
                 ? BezierLine(
                     label: "Rawat Jalan",
-                    lineColor: dataRawatJalan.isNotEmpty
-                        ? convertToColor(dataRawatJalan[0].color)
-                        : Colors.black,
+              lineColor: dataRawatJalan.isNotEmpty ? convertToColor(
+                  dataRawatJalan[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataRawatJalan.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Rawat Jalan",
-                    lineColor: dataRawatJalan.isNotEmpty
-                        ? convertToColor(dataRawatJalan[0].color)
-                        : Colors.black,
+                lineColor: dataRawatJalan.isNotEmpty ? convertToColor(
+                    dataRawatJalan[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1798,22 +1104,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataRawatDarurat.isNotEmpty
                 ? BezierLine(
                     label: "Rawat Darurat",
-                    lineColor: dataRawatDarurat.isNotEmpty
-                        ? convertToColor(dataRawatDarurat[0].color)
-                        : Colors.black,
+              lineColor: dataRawatDarurat.isNotEmpty ? convertToColor(
+                  dataRawatDarurat[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataRawatDarurat.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Rawat Darurat",
-                    lineColor: dataRawatDarurat.isNotEmpty
-                        ? convertToColor(dataRawatDarurat[0].color)
-                        : Colors.black,
+                lineColor: dataRawatDarurat.isNotEmpty ? convertToColor(
+                    dataRawatDarurat[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1822,22 +1125,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataPenunjang.isNotEmpty
                 ? BezierLine(
                     label: "Penunjang",
-                    lineColor: dataPenunjang.isNotEmpty
-                        ? convertToColor(dataPenunjang[0].color)
-                        : Colors.black,
+              lineColor: dataPenunjang.isNotEmpty ? convertToColor(
+                  dataPenunjang[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataPenunjang.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Penunjang",
-                    lineColor: dataPenunjang.isNotEmpty
-                        ? convertToColor(dataPenunjang[0].color)
-                        : Colors.black,
+                lineColor: dataPenunjang.isNotEmpty ? convertToColor(
+                    dataPenunjang[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1894,22 +1194,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataFarmasi.isNotEmpty
                 ? BezierLine(
                     label: "Farmasi",
-                    lineColor: dataFarmasi.isNotEmpty
-                        ? convertToColor(dataFarmasi[0].color)
-                        : Colors.orange,
+              lineColor: dataFarmasi.isNotEmpty ? convertToColor(
+                  dataFarmasi[0].color) : Colors.orange,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataFarmasi.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Farmasi",
-                    lineColor: dataFarmasi.isNotEmpty
-                        ? convertToColor(dataFarmasi[0].color)
-                        : Colors.orange,
+                lineColor: dataFarmasi.isNotEmpty ? convertToColor(
+                    dataFarmasi[0].color) : Colors.orange,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1918,22 +1215,20 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataInstalasiKamarJenazah.isNotEmpty
                 ? BezierLine(
                     label: "KM Jenazah",
-                    lineColor: dataInstalasiKamarJenazah.isNotEmpty
-                        ? convertToColor(dataInstalasiKamarJenazah[0].color)
-                        : Colors.grey,
+              lineColor: dataInstalasiKamarJenazah.isNotEmpty ? convertToColor(
+                  dataInstalasiKamarJenazah[0].color) : Colors.grey,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataInstalasiKamarJenazah.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "KM Jenazah",
-                    lineColor: dataInstalasiKamarJenazah.isNotEmpty
-                        ? convertToColor(dataInstalasiKamarJenazah[0].color)
-                        : Colors.grey,
+                lineColor: dataInstalasiKamarJenazah.isNotEmpty
+                    ? convertToColor(dataInstalasiKamarJenazah[0].color)
+                    : Colors.grey,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1942,22 +1237,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataRawatInap.isNotEmpty
                 ? BezierLine(
                     label: "Rawat Inap",
-                    lineColor: dataRawatInap.isNotEmpty
-                        ? convertToColor(dataRawatInap[0].color)
-                        : Colors.blue,
+              lineColor: dataRawatInap.isNotEmpty ? convertToColor(
+                  dataRawatInap[0].color) : Colors.blue,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataRawatInap.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Rawat Inap",
-                    lineColor: dataRawatInap.isNotEmpty
-                        ? convertToColor(dataRawatInap[0].color)
-                        : Colors.blue,
+                lineColor: dataRawatInap.isNotEmpty ? convertToColor(
+                    dataRawatInap[0].color) : Colors.blue,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1966,22 +1258,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataRawatJalan.isNotEmpty
                 ? BezierLine(
                     label: "Rawat Jalan",
-                    lineColor: dataRawatJalan.isNotEmpty
-                        ? convertToColor(dataRawatJalan[0].color)
-                        : Colors.brown,
+              lineColor: dataRawatJalan.isNotEmpty ? convertToColor(
+                  dataRawatJalan[0].color) : Colors.brown,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataRawatJalan.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Rawat Jalan",
-                    lineColor: dataRawatJalan.isNotEmpty
-                        ? convertToColor(dataRawatJalan[0].color)
-                        : Colors.brown,
+                lineColor: dataRawatJalan.isNotEmpty ? convertToColor(
+                    dataRawatJalan[0].color) : Colors.brown,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -1990,22 +1279,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataRawatDarurat.isNotEmpty
                 ? BezierLine(
                     label: "Rawat Darurat",
-                    lineColor: dataRawatDarurat.isNotEmpty
-                        ? convertToColor(dataRawatDarurat[0].color)
-                        : Colors.black,
+              lineColor: dataRawatDarurat.isNotEmpty ? convertToColor(
+                  dataRawatDarurat[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataRawatDarurat.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Rawat Darurat",
-                    lineColor: dataRawatDarurat.isNotEmpty
-                        ? convertToColor(dataRawatDarurat[0].color)
-                        : Colors.black,
+                lineColor: dataRawatDarurat.isNotEmpty ? convertToColor(
+                    dataRawatDarurat[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -2014,22 +1300,19 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
             dataPenunjang.isNotEmpty
                 ? BezierLine(
                     label: "Penunjang",
-                    lineColor: dataPenunjang.isNotEmpty
-                        ? convertToColor(dataPenunjang[0].color)
-                        : Colors.black,
+              lineColor: dataPenunjang.isNotEmpty ? convertToColor(
+                  dataPenunjang[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: dataPenunjang.map((e) {
-                      return DataPoint<DateTime>(
-                          value: double.parse(e.count),
+                      return DataPoint<DateTime>(value: double.parse(e.count),
                           xAxis: DateTime.parse(e.tanggalMasuk));
                     }).toList(),
                   )
                 : BezierLine(
                     label: "Penunjang",
-                    lineColor: dataRawatDarurat.isNotEmpty
-                        ? convertToColor(dataPenunjang[0].color)
-                        : Colors.black,
+                lineColor: dataRawatDarurat.isNotEmpty ? convertToColor(
+                    dataPenunjang[0].color) : Colors.black,
                     dataPointFillColor: Colors.white,
                     lineStrokeWidth: 3,
                     data: [
@@ -2061,19 +1344,6 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
     return Color(int.parse('$opacity$color', radix: 16));
   }
 
-  void _onchangeUnit(String newValue) {
-    setState(() {
-      unitId = newValue;
-    });
-    _getPendapatanUnit();
-  }
-
-  void _onchangePenjamin(String newValue) {
-    setState(() {
-      penjaminId = newValue;
-    });
-    _getPendapatanPenjamin();
-  }
 
   void _onchangePiutangUnit(String newValue) {
     setState(() {
@@ -2089,3 +1359,5 @@ class _page_dashboard_managementState extends State<page_dashboard_management>
     _getPiutangPenjamin();
   }
 }
+
+

@@ -1,7 +1,9 @@
 import 'package:cakramedic/screens/page_dashboar_management.dart';
+import 'package:cakramedic/screens/page_detail_management.dart';
 import 'package:cakramedic/screens/page_laporan_management.dart';
 import 'package:cakramedic/screens/page_profile_management.dart';
-import 'package:cakramedic/utils/ThemeChanger.dart';
+import 'package:cakramedic/utils/DataProvider.dart';
+import 'package:cakramedic/widgets/WidgetPendapatanTunaiUnitPenjamin.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,8 @@ class _BottomMenuManagementState extends State<BottomMenuManagement>
   int _pState = 0;
   var pages = [
     new page_dashboard_management(),
-    new page_profile_management()
+    new page_detail_management(),
+    new page_profile_management(),
   ];
 
   @override
@@ -57,7 +60,7 @@ class _BottomMenuManagementState extends State<BottomMenuManagement>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeNotifier>(
+    return Consumer<DataProvider>(
       builder: (context, notifier, child) => WillPopScope(
         onWillPop: _onWillPop,
         child: new Scaffold(
@@ -74,6 +77,18 @@ class _BottomMenuManagementState extends State<BottomMenuManagement>
                 title: Container(
                   margin: EdgeInsets.only(top: 5),
                   child: Text('Dashboard',
+                      style: TextStyle(fontFamily: 'WorkSans', fontSize: 11)),
+                ),
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.grey.shade50,
+                icon: Icon(
+                  FontAwesomeIcons.chartPie,
+                  size: 18,
+                ),
+                title: Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text('Pendatapan',
                       style: TextStyle(fontFamily: 'WorkSans', fontSize: 11)),
                 ),
               ),

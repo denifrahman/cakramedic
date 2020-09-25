@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:cakramedic/LocalBindings.dart';
 import 'package:cakramedic/screens/finger_print.dart';
-import 'package:cakramedic/utils/ThemeChanger.dart';
+import 'package:cakramedic/utils/DataProvider.dart';
 import 'package:cakramedic/utils/Themes.dart';
 import 'package:cakramedic/widgets/navigation_scale.dart';
 import 'package:flutter/cupertino.dart';
@@ -187,7 +187,7 @@ class _settingState extends State<setting> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Consumer<ThemeNotifier>(
+                Consumer<DataProvider>(
                   builder: (context, notifier, child) =>
                       ListTile(
                         title: const Text('Dark Theme'),
@@ -205,7 +205,7 @@ class _settingState extends State<setting> {
                         ),
                       ),
                 ),
-                Consumer<ThemeNotifier>(
+                Consumer<DataProvider>(
                   builder: (context, notifier, child) =>
                       ListTile(
                         title: const Text('Light Theme'),

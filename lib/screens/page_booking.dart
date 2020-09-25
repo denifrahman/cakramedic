@@ -1488,7 +1488,7 @@ class _page_bookingState extends State<page_booking> {
     if (tutorial) {
       WidgetsBinding.instance.addPostFrameCallback(_afterLayout2);
     }
-    if (newValue == '1') {
+    if (newValue == '1' || newValue == '21') {
       setState(() {
         showNumberAsuransi = false;
         showValidBoxIdPenjamin = false;

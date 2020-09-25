@@ -1,5 +1,5 @@
 import 'package:cakramedic/screens/page_aktivitas.dart';
-import 'package:cakramedic/utils/ThemeChanger.dart';
+import 'package:cakramedic/utils/DataProvider.dart';
 import 'package:cakramedic/widgets/widget_inbox.dart';
 import 'package:flutter/material.dart';
 import 'package:cakramedic/screens/page_dashboard.dart';
@@ -126,7 +126,7 @@ class _BottomMenuState extends State<BottomMenu> with TickerProviderStateMixin {
 //    }else{
 //      setting = false;
 //    }
-    return Consumer<ThemeNotifier>(
+    return Consumer<DataProvider>(
       builder: (context, notifier, child) =>
           WillPopScope(
             onWillPop: _onWillPop,
