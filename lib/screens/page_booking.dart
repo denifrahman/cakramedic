@@ -54,17 +54,12 @@ class _page_bookingState extends State<page_booking> {
   bool _autoValidate = true;
 
   final TextEditingController _typeAheadController = TextEditingController();
-  final TextEditingController noRekamMedisController =
-      new TextEditingController();
-  final TextEditingController idNumberPenjaminController =
-      new TextEditingController();
+  final TextEditingController noRekamMedisController = new TextEditingController();
+  final TextEditingController idNumberPenjaminController = new TextEditingController();
 
-  final TextEditingController tahunLahirController =
-      new TextEditingController();
-  final TextEditingController tanggalLahirController =
-      new TextEditingController();
-  final TextEditingController bulanLahirController =
-      new TextEditingController();
+  final TextEditingController tahunLahirController = new TextEditingController();
+  final TextEditingController tanggalLahirController = new TextEditingController();
+  final TextEditingController bulanLahirController = new TextEditingController();
 
   DateFormat timeFormat;
   bool _saving = false;
@@ -79,8 +74,7 @@ class _page_bookingState extends State<page_booking> {
   String namaPasien = "";
   String mInstalasiId = "";
 
-  String alamatPasien =
-      "alamat pasien default sistem cakra medic sdasdad sadsada sadsfsfdsfs";
+  String alamatPasien = "alamat pasien default sistem cakra medic sdasdad sadsada sadsfsfdsfs";
   String pasienId = '';
   bool validErrNorm = false;
   bool showNumberAsuransi = false;
@@ -118,8 +112,7 @@ class _page_bookingState extends State<page_booking> {
   }
 
   void checkIntroducing() async {
-    String isIntro =
-        await LocalStorage.sharedInstance.readValue('introBooking');
+    String isIntro = await LocalStorage.sharedInstance.readValue('introBooking');
     if (isIntro == null) {
       setState(() {
         tutorial = true;
@@ -132,6 +125,7 @@ class _page_bookingState extends State<page_booking> {
       });
     }
   }
+
   void _afterLayout(_) {
     Future.delayed(Duration(milliseconds: 100), () {
       showTutorial();
@@ -167,7 +161,6 @@ class _page_bookingState extends State<page_booking> {
       showTutorial6();
     });
   }
-
 
   void showTutorial() {
     TutorialCoachMark(
@@ -223,16 +216,10 @@ class _page_bookingState extends State<page_booking> {
   }
 
   void showTutorial6() {
-    TutorialCoachMark(context,
-        targets: targets6,
-        textSkip: ' ',
-        colorShadow: Colors.cyan[800],
-        paddingFocus: 10,
-        opacityShadow: 0.8, finish: () {
+    TutorialCoachMark(context, targets: targets6, textSkip: ' ', colorShadow: Colors.cyan[800], paddingFocus: 10, opacityShadow: 0.8, finish: () {
 //          print("finish");
       String setting_finger = '{"introBooking":"true"}';
-      LocalStorage.sharedInstance
-          .writeValue(key: 'introBooking', value: setting_finger);
+      LocalStorage.sharedInstance.writeValue(key: 'introBooking', value: setting_finger);
     })
       ..show();
   }
@@ -251,18 +238,11 @@ class _page_bookingState extends State<page_booking> {
                 children: <Widget>[
                   Text(
                     "Penjamin / Asuransi",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20.0),
                   ),
                   Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Image(
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.fill,
-                          image:
-                              new AssetImage('assets/tutorial/asuransi.png'))),
+                      child: Image(width: MediaQuery.of(context).size.width, fit: BoxFit.fill, image: new AssetImage('assets/tutorial/asuransi.png'))),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
@@ -289,10 +269,7 @@ class _page_bookingState extends State<page_booking> {
                 children: <Widget>[
                   Text(
                     "Selanjutnya",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20.0),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -320,10 +297,7 @@ class _page_bookingState extends State<page_booking> {
                 children: <Widget>[
                   Text(
                     "Poli Klinik",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20.0),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -351,10 +325,7 @@ class _page_bookingState extends State<page_booking> {
                 children: <Widget>[
                   Text(
                     "Pilih Tanggal",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20.0),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -382,10 +353,7 @@ class _page_bookingState extends State<page_booking> {
                 children: <Widget>[
                   Text(
                     "Pilih Dokter",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20.0),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -413,10 +381,7 @@ class _page_bookingState extends State<page_booking> {
                 children: <Widget>[
                   Text(
                     "Nomor Antrian",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20.0),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -458,8 +423,7 @@ class _page_bookingState extends State<page_booking> {
           setState(() {
             _saving = false;
             Iterable list = json.decode(response.body)['data'];
-            listDokter =
-                list.map((model) => MJadwalDokter.fromMap(model)).toList();
+            listDokter = list.map((model) => MJadwalDokter.fromMap(model)).toList();
           });
         } else {
           setState(() {
@@ -485,8 +449,7 @@ class _page_bookingState extends State<page_booking> {
     setState(() {
       pasienId = result['m_pasien_id'];
     });
-    _getDataPasienByNoRm(
-        result['akunpasien_no_rm'], result['akunpasien_tgl_lahir']);
+    _getDataPasienByNoRm(result['akunpasien_no_rm'], result['akunpasien_tgl_lahir']);
   }
 
   void _getPoliKlinik() async {
@@ -499,8 +462,7 @@ class _page_bookingState extends State<page_booking> {
         setState(() {
           _saving = false;
           Iterable list = json.decode(response.body)['data'];
-          listPoliKlinik =
-              list.map((model) => MPoliKlinik.fromMap(model)).toList();
+          listPoliKlinik = list.map((model) => MPoliKlinik.fromMap(model)).toList();
         });
       } else {
         setState(() {
@@ -553,12 +515,9 @@ class _page_bookingState extends State<page_booking> {
 
   var myFormat = DateFormat('dd MMM yyyy');
   var date = DateTime.now();
+
   Future<String> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: date,
-        firstDate: DateTime(1880, 1),
-        lastDate: DateTime(2101));
+    final DateTime picked = await showDatePicker(context: context, initialDate: date, firstDate: DateTime(1880, 1), lastDate: DateTime(2101));
 //    return myFormat.format(picked);
     if (picked == null) {
       print('silahkan pilih tgl');
@@ -607,31 +566,27 @@ class _page_bookingState extends State<page_booking> {
     }
     var today = DateTime.now();
     var width = MediaQuery.of(context).size.width;
-    var tglBooking =
-        DateFormat("EEEE, dd MMM yyyy", 'in').format(_selectedDateBook);
-    var widget1 = MediaQuery.of(context).size.height - 230;
+    var tglBooking = DateFormat("EEEE, dd MMM yyyy", 'in').format(_selectedDateBook);
     var widget2 = MediaQuery.of(context).size.height - 320;
 
     int hourseSetting = dataSetting;
-    var kedatanganJam =
-        int.parse(jamBukaDokter.substring(0, 2)) - hourseSetting;
+    var kedatanganJam = int.parse(jamBukaDokter.substring(0, 2)) - hourseSetting;
     var menit = jamBukaDokter.substring(2, 5);
-
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        title: Text(
-          'Booking',
-        ),
+    var appBar = AppBar(
+      elevation: 1,
+      title: Text(
+        'Booking',
       ),
+    );
+    var widget1 = MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top - 120;
+    return Scaffold(
+      appBar: appBar,
       body: ModalProgressHUD(
         inAsyncCall: _saving,
         child: new Form(
           key: _formKey,
           autovalidate: _autoValidate,
           child: Container(
-              padding: EdgeInsets.all(0),
-//              color: Colors.white,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -648,43 +603,28 @@ class _page_bookingState extends State<page_booking> {
                                   alignment: Alignment.centerLeft,
                                   child: Container(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text('No Rekam Medis',
-                                                style: TextStyle(
-                                                    color: Colors.grey)),
-                                            Text(noRekamMedis)
-                                          ],
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[Text('No Rekam Medis', style: TextStyle(color: Colors.grey)), Text(noRekamMedis)],
                                         ),
                                         Container(
                                           height: 5,
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text('Nama Pasien',
-                                                style: TextStyle(
-                                                    color: Colors.grey)),
-                                            Text(namaPasien)
-                                          ],
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[Text('Nama Pasien', style: TextStyle(color: Colors.grey)), Text(namaPasien)],
                                         ),
                                         Container(
                                           height: 5,
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Text(
                                               'Alamat',
-                                              style:
-                                                  TextStyle(color: Colors.grey),
+                                              style: TextStyle(color: Colors.grey),
                                             ),
                                             Container(
                                               width: 10,
@@ -692,8 +632,7 @@ class _page_bookingState extends State<page_booking> {
                                             Flexible(
                                               child: RichText(
                                                 overflow: TextOverflow.ellipsis,
-                                                strutStyle:
-                                                    StrutStyle(fontSize: 12.0),
+                                                strutStyle: StrutStyle(fontSize: 12.0),
                                                 text: TextSpan(
                                                     style: TextStyle(
                                                       color: Colors.grey[800],
@@ -707,7 +646,9 @@ class _page_bookingState extends State<page_booking> {
                                     ),
                                   ),
                                 ),
-                                Divider(color: Colors.grey[800],),
+                                Divider(
+                                  color: Colors.grey[800],
+                                ),
                                 Container(
                                   height: 20,
                                 ),
@@ -715,41 +656,28 @@ class _page_bookingState extends State<page_booking> {
                                   alignment: Alignment.center,
                                   child: Container(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text(
-                                            'Pilih Penjamin Pasien / Metode Pembayaran'),
+                                        Text('Pilih Penjamin Pasien / Metode Pembayaran'),
                                         Container(
                                           height: 5,
                                         ),
                                         Container(
                                           key: keyButton,
                                           height: 60,
-//                                          width:
-//                                              MediaQuery.of(context).size.width - 40,
-                                          padding: EdgeInsets.only(
-                                              left: 10, right: 10, top: 5),
+                                          padding: EdgeInsets.only(left: 10, right: 10, top: 5),
                                           decoration: BoxDecoration(
                                               border: Border.all(
-                                                color: showValidBoxIdPenjamin
-                                                    ? Colors.red
-                                                    : Colors.grey,
+                                                color: showValidBoxIdPenjamin ? Colors.red : Colors.grey,
                                                 width: 1,
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child:
-                                          dataPasien.isEmpty
+                                              borderRadius: BorderRadius.circular(4)),
+                                          child: dataPasien.isEmpty
                                               ? DropdownButtonFormField<String>(
-                                                  decoration:
-                                                      InputDecoration.collapsed(
-                                                          hintText: ''),
+                                                  decoration: InputDecoration.collapsed(hintText: ''),
                                                   hint: new Text(
                                                     "Pilih Penjamin",
-                                                    style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 12),
+                                                    style: TextStyle(color: Colors.grey, fontSize: 12),
                                                   ),
                                                   value: penjaminPasien,
                                                   onChanged: (String newValue) {
@@ -758,17 +686,12 @@ class _page_bookingState extends State<page_booking> {
                                                     });
                                                     _onchangePenjamin(newValue);
                                                   },
-                                                  items: dataPenjamin
-                                                      .map((MPenjamin item) {
-                                                    return new DropdownMenuItem<
-                                                        String>(
-                                                      value: item.penjaminId
-                                                          .toString(),
+                                                  items: dataPenjamin.map((MPenjamin item) {
+                                                    return new DropdownMenuItem<String>(
+                                                      value: item.penjaminId.toString(),
                                                       child: new Text(
-                                                        item.penjaminNama
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 13),
+                                                        item.penjaminNama.toString(),
+                                                        style: TextStyle(fontSize: 13),
                                                       ),
                                                     );
                                                   }).toList(),
@@ -782,8 +705,7 @@ class _page_bookingState extends State<page_booking> {
                                             child: showValidBoxIdPenjamin
                                                 ? Text(
                                                     'Silahkan pilih penjamin',
-                                                    style: TextStyle(
-                                                        color: Colors.red),
+                                                    style: TextStyle(color: Colors.red),
                                                   )
                                                 : Container()),
                                         Container(
@@ -792,17 +714,12 @@ class _page_bookingState extends State<page_booking> {
                                         showNumberAsuransi
                                             ? Column(
                                                 children: <Widget>[
-                                                  Align(
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      child: Text(
-                                                          'Nomor Asuransi')),
+                                                  Align(alignment: Alignment.centerLeft, child: Text('Nomor Asuransi')),
                                                   Container(
                                                     height: 5,
                                                   ),
                                                   new TextFormField(
-                                                    controller:
-                                                        idNumberPenjaminController,
+                                                    controller: idNumberPenjaminController,
                                                     validator: (String arg) {
                                                       if (arg.length < 1)
                                                         return '* Silahkan isi nomor asuransi anda';
@@ -810,8 +727,7 @@ class _page_bookingState extends State<page_booking> {
                                                         return null;
                                                     },
                                                     decoration: InputDecoration(
-                                                      border:
-                                                          OutlineInputBorder(),
+                                                      border: OutlineInputBorder(),
                                                       labelText: '',
 //                                                        errorText: showValidIdAsuransi
 //                                                            ? 'Silahkan masukkan nomor asuransi'
@@ -838,48 +754,32 @@ class _page_bookingState extends State<page_booking> {
                             content: Container(
                               height: widget1,
                               child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text('No Rekam Medis',
-                                                style: TextStyle(
-                                                    color: Colors.grey)),
-                                            Text(noRekamMedis)
-                                          ],
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[Text('No Rekam Medis', style: TextStyle(color: Colors.grey)), Text(noRekamMedis)],
                                         ),
                                         Container(
                                           height: 5,
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text('Nama Pasien',
-                                                style: TextStyle(
-                                                    color: Colors.grey)),
-                                            Text(namaPasien)
-                                          ],
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[Text('Nama Pasien', style: TextStyle(color: Colors.grey)), Text(namaPasien)],
                                         ),
                                         Container(
                                           height: 5,
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Text(
                                               'Alamat',
-                                              style:
-                                                  TextStyle(color: Colors.grey),
+                                              style: TextStyle(color: Colors.grey),
                                             ),
                                             Container(
                                               width: 10,
@@ -887,30 +787,25 @@ class _page_bookingState extends State<page_booking> {
                                             Flexible(
                                               child: RichText(
                                                 overflow: TextOverflow.ellipsis,
-                                                strutStyle:
-                                                    StrutStyle(fontSize: 12.0),
-                                                text: TextSpan(
-                                                    style: TextStyle(
-                                                        color:
-                                                            Colors.grey[800]),
-                                                    text: alamatPasien),
+                                                strutStyle: StrutStyle(fontSize: 12.0),
+                                                text: TextSpan(style: TextStyle(color: Colors.grey[800]), text: alamatPasien),
                                               ),
                                             ),
                                           ],
                                         ),
-                                        Divider(color: Colors.grey[800],),
+                                        Divider(
+                                          color: Colors.grey[800],
+                                        ),
                                       ],
                                     ),
                                   ),
-
                                   Container(
-                                    height: 30,
+                                    height: 20,
 //                                    padding: EdgeInsets.only(top: 10,bottom: 10),
                                     child: Text(
                                       'Pilih Poliklinik',
                                     ),
                                   ),
-
                                   Expanded(
                                       flex: 4,
                                       key: keyButton3,
@@ -918,33 +813,21 @@ class _page_bookingState extends State<page_booking> {
                                           itemCount: listPoliKlinik.length,
                                           itemBuilder: (context, index) {
                                             return InkWell(
-                                              onTap: () => _selectedPoli(
-                                                  listPoliKlinik[index].unitId,
-                                                  listPoliKlinik[index]
-                                                      .unitNama,
-                                                  listPoliKlinik[index]
-                                                      .mInstalasiId),
+                                              onTap: () => _selectedPoli(listPoliKlinik[index].unitId, listPoliKlinik[index].unitNama, listPoliKlinik[index].mInstalasiId),
                                               child: Card(
                                                 elevation: 3,
                                                 child: Container(
                                                   decoration: BoxDecoration(
 //                                                  color: Colors.cyan,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
+                                                    borderRadius: BorderRadius.circular(5.0),
                                                   ),
-                                                  margin: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 3.0,
-                                                      vertical: 3.0),
+                                                  margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
                                                   child: ListTile(
                                                     title: Text(
-                                                      listPoliKlinik[index]
-                                                          .unitNama,
-                                                      style:
-                                                          TextStyle(fontSize: 13
+                                                      listPoliKlinik[index].unitNama,
+                                                      style: TextStyle(fontSize: 13
 //                                                          color: Colors.white
-                                                              ),
+                                                          ),
                                                     ),
                                                   ),
                                                 ),
@@ -968,43 +851,28 @@ class _page_bookingState extends State<page_booking> {
                                 children: <Widget>[
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text('No Rekam Medis',
-                                                style: TextStyle(
-                                                    color: Colors.grey)),
-                                            Text(noRekamMedis)
-                                          ],
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[Text('No Rekam Medis', style: TextStyle(color: Colors.grey)), Text(noRekamMedis)],
                                         ),
                                         Container(
-                                          height: 5,
+                                          height: 3,
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text('Nama Pasien',
-                                                style: TextStyle(
-                                                    color: Colors.grey)),
-                                            Text(namaPasien)
-                                          ],
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[Text('Nama Pasien', style: TextStyle(color: Colors.grey)), Text(namaPasien)],
                                         ),
                                         Container(
-                                          height: 5,
+                                          height: 3,
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Text(
                                               'Alamat',
-                                              style:
-                                                  TextStyle(color: Colors.grey),
+                                              style: TextStyle(color: Colors.grey),
                                             ),
                                             Container(
                                               width: 10,
@@ -1012,64 +880,45 @@ class _page_bookingState extends State<page_booking> {
                                             Flexible(
                                               child: RichText(
                                                 overflow: TextOverflow.ellipsis,
-                                                strutStyle:
-                                                    StrutStyle(fontSize: 12.0),
-                                                text: TextSpan(
-                                                    style: TextStyle(
-                                                        color:
-                                                            Colors.grey[800]),
-                                                    text: alamatPasien),
+                                                strutStyle: StrutStyle(fontSize: 12.0),
+                                                text: TextSpan(style: TextStyle(color: Colors.grey[800]), text: alamatPasien),
                                               ),
                                             ),
                                           ],
                                         ),
-                                        Divider(color: Colors.grey[800],),
+                                        Divider(
+                                          color: Colors.grey[800],
+                                        ),
                                       ],
                                     ),
                                   ),
                                   Container(
-                                    height: 10,
+                                    height: 5,
                                   ),
                                   Container(
-                                    padding: EdgeInsets.all(0),
                                     child: Column(
                                       key: keyButton4,
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Text(
                                               'Pilih Jadwal Berobat',
-                                              style: TextStyle(
-                                                  color: Colors.grey[600]),
+                                              style: TextStyle(color: Colors.grey[600]),
                                             ),
                                             Text(
-                                              DateFormat(
-                                                      "EEEE, dd MMM yyyy", 'in')
-                                                  .format(_selectedDateBook),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.red),
+                                              DateFormat("EEEE, dd MMM yyyy", 'in').format(_selectedDateBook),
+                                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
                                             )
                                           ],
                                         ),
                                         HorizontalCalendar(
                                           height: 80,
-                                          selectedDateTextStyle: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600),
-                                          monthTextStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                          dateTextStyle: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
+                                          selectedDateTextStyle: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w600),
+                                          monthTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                                          dateTextStyle: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500),
                                           weekDayFormat: '',
-                                          firstDate:
-                                              parsedDate.add(Duration(days: 1)),
+                                          firstDate: parsedDate.add(Duration(days: 1)),
                                           lastDate: parsedDate.add(
                                             Duration(days: 7),
                                           ),
@@ -1077,13 +926,12 @@ class _page_bookingState extends State<page_booking> {
                                           //pass other properties as required
                                         ),
                                         Container(
-                                          margin: EdgeInsets.only(bottom: 10),
+                                          margin: EdgeInsets.only(bottom: 15),
                                           child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 'Pilih Dokter',
-                                                style: TextStyle(
-                                                    color: Colors.grey[600]),
+                                                style: TextStyle(color: Colors.grey[600]),
                                               )),
                                         ),
                                       ],
@@ -1096,98 +944,49 @@ class _page_bookingState extends State<page_booking> {
                                               child: Text(
                                               'Data tidak ada \n Silahkan Pilih tanggal lain',
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.grey[400]),
+                                              style: TextStyle(color: Colors.grey[400]),
                                             ))
                                           : listDokter.length == 0
                                               ? Text('Silahkan pilih tanggal')
                                               : ListView.builder(
                                                   itemCount: listDokter.length,
                                                   key: keyButton5,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    DateTime now =
-                                                        DateTime.now();
-                                                    String formattedDate =
-                                                        DateFormat('kk')
-                                                            .format(now);
-                                                    var jamAkhir = listDokter[
-                                                            index]
-                                                        .jadwalpraktekJamAwal
-                                                        .substring(0, 2);
+                                                  itemBuilder: (context, index) {
+                                                    DateTime now = DateTime.now();
+                                                    String formattedDate = DateFormat('kk').format(now);
+                                                    var jamAkhir = listDokter[index].jadwalpraktekJamAwal.substring(0, 2);
                                                     bool jam = false;
-                                                    if (int.parse(jamAkhir) >=
-                                                        int.parse(
-                                                            formattedDate)) {
+                                                    if (int.parse(jamAkhir) >= int.parse(formattedDate)) {
                                                       jam = true;
                                                     }
                                                     return InkWell(
-                                                      onTap: () => _getNoRegistrasi(
-                                                          listDokter[index]
-                                                              .pegawaiNama,
-                                                          listDokter[index]
-                                                              .mPegawaiId,
-                                                          listDokter[index]
-                                                              .jadwalpraktekId,
-                                                          listDokter[index]
-                                                              .jadwalpraktekJamAwal),
+                                                      onTap: () => _getNoRegistrasi(listDokter[index].pegawaiNama, listDokter[index].mPegawaiId, listDokter[index].jadwalpraktekId,
+                                                          listDokter[index].jadwalpraktekJamAwal),
                                                       child: Card(
                                                         elevation: 3,
                                                         child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
+                                                          decoration: BoxDecoration(
 //                                                  color: Colors.cyan,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5.0),
+                                                            borderRadius: BorderRadius.circular(5.0),
                                                           ),
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      3.0,
-                                                                  vertical:
-                                                                      3.0),
+                                                          margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
                                                           child: ListTile(
                                                             title: Text(
-                                                              listDokter[index]
-                                                                  .pegawaiNama,
-                                                              style: TextStyle(
-                                                                  fontSize: 13),
+                                                              listDokter[index].pegawaiNama,
+                                                              style: TextStyle(fontSize: 13),
                                                             ),
                                                             trailing: Container(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(5),
+                                                              padding: EdgeInsets.all(5),
                                                               child: Column(
-                                                                children: <
-                                                                    Widget>[
-                                                                  Text(
-                                                                      listDokter[
-                                                                              index]
-                                                                          .jadwalpraktekJamAwal
-                                                                          .substring(
-                                                                              0,
-                                                                              5),
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              12)),
+                                                                children: <Widget>[
+                                                                  Text(listDokter[index].jadwalpraktekJamAwal.substring(0, 5), style: TextStyle(fontSize: 12)),
                                                                   Icon(
-                                                                    Icons
-                                                                        .arrow_downward,
+                                                                    Icons.arrow_downward,
                                                                     size: 12,
                                                                   ),
                                                                   Text(
-                                                                    listDokter[
-                                                                            index]
-                                                                        .jadwalpraktekJamAkhir
-                                                                        .substring(
-                                                                            0,
-                                                                            5),
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            12),
+                                                                    listDokter[index].jadwalpraktekJamAkhir.substring(0, 5),
+                                                                    style: TextStyle(fontSize: 12),
                                                                   ),
                                                                 ],
                                                               ),
@@ -1198,7 +997,7 @@ class _page_bookingState extends State<page_booking> {
                                                     );
                                                   })),
                                   Container(
-                                    height: 5,
+                                    height: 10,
                                   )
                                 ],
                               ),
@@ -1216,9 +1015,7 @@ class _page_bookingState extends State<page_booking> {
                                       Text(
                                         'Selamat Pendaftaran Berhasil',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                       ),
                                       Container(
                                         height: 20,
@@ -1226,9 +1023,7 @@ class _page_bookingState extends State<page_booking> {
                                       Text(
                                         namaPoli,
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.normal),
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                                       ),
                                       Container(
                                         height: 5,
@@ -1236,9 +1031,7 @@ class _page_bookingState extends State<page_booking> {
                                       Text(
                                         namaDokter,
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
                                       ),
                                       Container(
                                         height: 20,
@@ -1246,9 +1039,7 @@ class _page_bookingState extends State<page_booking> {
                                       Text(
                                         'Nomor Antrian',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.normal),
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                                       ),
                                       Container(
                                         height: 10,
@@ -1259,22 +1050,13 @@ class _page_bookingState extends State<page_booking> {
                                             width: 100,
                                             height: 50,
                                             decoration: new BoxDecoration(
-                                                color: Colors
-                                                    .red, //new Color.fromRGBO(255, 0, 0, 0.0),
-                                                borderRadius:
-                                                    new BorderRadius.all(
-                                                        Radius.circular(40.0))),
+                                                color: Colors.red, //new Color.fromRGBO(255, 0, 0, 0.0),
+                                                borderRadius: new BorderRadius.all(Radius.circular(40.0))),
                                             child: Align(
                                                 alignment: Alignment.center,
                                                 child: Text(
                                                   noAntrian_data,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 30,
-                                                      fontFamily:
-                                                          "WorkSansSemiBold",
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                  style: TextStyle(color: Colors.white, fontSize: 30, fontFamily: "WorkSansSemiBold", fontWeight: FontWeight.bold),
                                                 ))),
                                       ),
                                       Container(
@@ -1282,18 +1064,13 @@ class _page_bookingState extends State<page_booking> {
                                       ),
                                       Container(
                                         padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            borderRadius: new BorderRadius.all(
-                                                Radius.circular(10.0))),
+                                        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: new BorderRadius.all(Radius.circular(10.0))),
                                         child: Column(
                                           children: <Widget>[
                                             Text(
                                               'KODE BOOKING',
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                             ),
                                             Center(
                                               child: Container(
@@ -1301,8 +1078,7 @@ class _page_bookingState extends State<page_booking> {
                                                 height: 140,
 //                                      color: Colors.black2,
                                                 child: QrImage(
-                                                  data: kodeBooking_data
-                                                      .toUpperCase(),
+                                                  data: kodeBooking_data.toUpperCase(),
                                                   version: QrVersions.auto,
                                                   size: 300.0,
                                                 ),
@@ -1311,9 +1087,7 @@ class _page_bookingState extends State<page_booking> {
                                             Text(
                                               kodeBooking_data.toUpperCase(),
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold),
+                                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                             ),
                                           ],
                                         ),
@@ -1323,30 +1097,18 @@ class _page_bookingState extends State<page_booking> {
                                       ),
                                       Container(
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: <Widget>[
-                                            Text('$tglBooking',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
+                                            Text('$tglBooking', textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                             Container(
                                               width: 10,
                                             ),
-                                            Text(jamBukaDokter.substring(0, 5),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
+                                            Text(jamBukaDokter.substring(0, 5), textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                           ],
                                         ),
                                       ),
                                       Container(
-                                          padding: EdgeInsets.only(
-                                              left: 10, right: 10, top: 10),
+                                          padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                                           child: Text(
                                             'Anda Harus Checkin/Konfirmasi Sebelum',
                                             textAlign: TextAlign.center,
@@ -1354,10 +1116,7 @@ class _page_bookingState extends State<page_booking> {
                                       Text(
                                         '$tglBooking Jam $kedatanganJam$menit',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: 'WorkSansSemiBold',
-                                            color: Colors.red),
+                                        style: TextStyle(fontSize: 16, fontFamily: 'WorkSansSemiBold', color: Colors.red),
                                       )
                                     ],
                                   ),
@@ -1371,54 +1130,39 @@ class _page_bookingState extends State<page_booking> {
 //                        onStepTapped: (step) => goTo(step),
                         onStepCancel: cancel,
                         type: StepperType.horizontal,
-                        controlsBuilder: (BuildContext context,
-                                {VoidCallback onStepContinue,
-                                VoidCallback onStepCancel}) =>
-                            currentStep == 0
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: Container(
-                                      height: 50,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: Colors.cyan),
-                                      child: InkWell(
-                                        key: keyButton2,
-                                        onTap: () => next(),
-                                        child: Center(
-                                            child: Text(
-                                          titleButtonLanjut,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15),
-                                        )),
-                                      ),
+                        controlsBuilder: (BuildContext context, {VoidCallback onStepContinue, VoidCallback onStepCancel}) => currentStep == 0
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: Container(
+                                  height: 50,
+                                  width: 100,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.cyan),
+                                  child: InkWell(
+                                    key: keyButton2,
+                                    onTap: () => next(),
+                                    child: Center(
+                                        child: Text(
+                                      titleButtonLanjut,
+                                      style: TextStyle(color: Colors.white, fontSize: 15),
+                                    )),
+                                  ),
+                                ),
+                              )
+                            : currentStep == 1 || currentStep == 2
+                                ? Container(
+                                    height: 50,
+                                    width: 150,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.red),
+                                    child: InkWell(
+                                      onTap: onStepCancel,
+                                      child: Center(
+                                          child: Text(
+                                        titleButtonKembali,
+                                        style: TextStyle(color: Colors.white, fontSize: 15),
+                                      )),
                                     ),
                                   )
-                                : currentStep == 1 || currentStep == 2
-                                    ? Container(
-                                        height: 50,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: Colors.red),
-                                        child: InkWell(
-                                          onTap: onStepCancel,
-                                          child: Center(
-                                              child: Text(
-                                            titleButtonKembali,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
-                                          )),
-                                        ),
-                                      )
-                                    : currentStep == 3
-                                        ? Container()
-                                        : Container()),
+                                : currentStep == 3 ? Container() : Container()),
                   ),
                 ],
               )),
@@ -1448,15 +1192,12 @@ class _page_bookingState extends State<page_booking> {
         setState(() {
           showValidBoxIdPenjamin = false;
         });
-        if (idNumberPenjaminController.text == '' ||
-            idNumberPenjaminController.text == null) {
+        if (idNumberPenjaminController.text == '' || idNumberPenjaminController.text == null) {
           setState(() {
             showValidIdAsuransi = true;
           });
         } else {
-          currentStep + 1 != 5
-              ? goTo(currentStep + 1)
-              : setState(() => complete = true);
+          currentStep + 1 != 5 ? goTo(currentStep + 1) : setState(() => complete = true);
           setState(() {
             showValidIdAsuransi = false;
             showValidBoxIdPenjamin = false;
@@ -1466,9 +1207,7 @@ class _page_bookingState extends State<page_booking> {
         if (tutorial) {
           WidgetsBinding.instance.addPostFrameCallback(_afterLayout3);
         }
-        currentStep + 1 != 5
-            ? goTo(currentStep + 1)
-            : setState(() => complete = true);
+        currentStep + 1 != 5 ? goTo(currentStep + 1) : setState(() => complete = true);
       }
     }
   }
@@ -1566,11 +1305,9 @@ class _page_bookingState extends State<page_booking> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Tanggal Booking',
-                        style: TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text('Tanggal Booking', style: TextStyle(color: Colors.grey, fontSize: 12)),
                     Text(
-                      DateFormat("EEEE, dd MMM yyyy", 'in')
-                          .format(_selectedDateBook),
+                      DateFormat("EEEE, dd MMM yyyy", 'in').format(_selectedDateBook),
                       style: TextStyle(fontSize: 12),
                     )
                   ],
@@ -1581,8 +1318,7 @@ class _page_bookingState extends State<page_booking> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('No Rekam Medis',
-                        style: TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text('No Rekam Medis', style: TextStyle(color: Colors.grey, fontSize: 12)),
                     Text(
                       noRekamMedis,
                       style: TextStyle(fontSize: 12),
@@ -1594,11 +1330,7 @@ class _page_bookingState extends State<page_booking> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Nama Pasien',
-                        style: TextStyle(color: Colors.grey, fontSize: 12)),
-                    Text(namaPasien, style: TextStyle(fontSize: 12))
-                  ],
+                  children: <Widget>[Text('Nama Pasien', style: TextStyle(color: Colors.grey, fontSize: 12)), Text(namaPasien, style: TextStyle(fontSize: 12))],
                 ),
                 Container(
                   height: 5,
@@ -1617,9 +1349,7 @@ class _page_bookingState extends State<page_booking> {
                       child: RichText(
                         overflow: TextOverflow.ellipsis,
                         strutStyle: StrutStyle(fontSize: 12.0),
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            text: alamatPasien),
+                        text: TextSpan(style: TextStyle(color: Colors.black), text: alamatPasien),
                       ),
                     ),
                   ],
@@ -1630,8 +1360,7 @@ class _page_bookingState extends State<page_booking> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Poli',
-                        style: TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text('Poli', style: TextStyle(color: Colors.grey, fontSize: 12)),
                     Text(
                       namaPoli,
                       style: TextStyle(fontSize: 12),
@@ -1644,28 +1373,18 @@ class _page_bookingState extends State<page_booking> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Dokter',
-                        style: TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text('Dokter', style: TextStyle(color: Colors.grey, fontSize: 12)),
                   ],
                 ),
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(namaDokter,
-                        textAlign: TextAlign.end,
-                        style: TextStyle(fontSize: 12))),
+                Align(alignment: Alignment.centerRight, child: Text(namaDokter, textAlign: TextAlign.end, style: TextStyle(fontSize: 12))),
                 Container(
                   height: 15,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Estimasi Nomor Antrian',
-                        textAlign: TextAlign.end,
-                        style: TextStyle(fontSize: 12)),
-                    Text(noAntrian,
-                        key: keyButton6,
-                        textAlign: TextAlign.end,
-                        style: TextStyle(fontSize: 14)),
+                    Text('Estimasi Nomor Antrian', textAlign: TextAlign.end, style: TextStyle(fontSize: 12)),
+                    Text(noAntrian, key: keyButton6, textAlign: TextAlign.end, style: TextStyle(fontSize: 14)),
                   ],
                 ),
               ],

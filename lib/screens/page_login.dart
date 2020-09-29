@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cakramedic/providers/booking.dart';
+import 'package:cakramedic/screens/page_booking_non_pasien.dart';
 import 'package:cakramedic/screens/page_lupa_password.dart';
 import 'package:cakramedic/screens/page_pendaftaran_pasien.dart';
 import 'package:local_auth/local_auth.dart';
@@ -38,8 +39,6 @@ class _LoginPageState extends State<LoginPage>
       // Handle notification message
       final dynamic notification = message['notification'];
     }
-
-    // Or do other work.
   }
 
   String PLAY_STORE_URL =
@@ -299,7 +298,26 @@ class _LoginPageState extends State<LoginPage>
                                     ),
                                   ),
                                 ),
-
+                                Container(
+                                  height: 5,
+                                ),
+                                Container(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('Booking tanpa Nomor rekam medis'),
+                                      InkWell(
+                                        onTap: (){
+                                          Navigator.push(
+                                            context,
+                                            ScaleRoute(page: page_booking_non_pasien()),
+                                          );
+                                        },
+                                          child: Text(' Disini',style: TextStyle(color: Colors.red),))
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           ),
